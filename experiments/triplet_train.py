@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
             last_model_wts = base_model.state_dict()
             if epoch % 10 == 9:
-                save_network(base_model, epoch)
+                save_network(base_model, epoch, 'TripletLoss')
 
             scheduler.step()
 
