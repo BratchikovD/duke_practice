@@ -60,7 +60,7 @@ for epoch in range(EPOCHS):
     model.to(DEVICE)
     model.train()
 
-    for index, (inputs, labels) in (enumerate(tqdm(dataloader))):
+    for index, (inputs, labels) in (enumerate(tqdm(dataloader, desc="Training", leave=False))):
         inputs, labels = inputs.to(DEVICE), labels.to(DEVICE)
 
         optimizer.zero_grad()
