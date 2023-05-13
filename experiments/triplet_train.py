@@ -9,6 +9,7 @@ from torchvision import models
 from helpers.utils import log_to_file, get_accuracy
 from pytorch_metric_learning import miners, distances, losses
 from tqdm import tqdm
+
 BASE_DIR = Path(__file__).parent.parent
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 TRAIN_DIR = os.path.join(DATA_DIR, 'train')
@@ -59,7 +60,7 @@ for epoch in range(EPOCHS):
     model.to(DEVICE)
     model.train()
 
-    for index, (inputs, labels) in tqdm(enumerate(dataloader)):
+    for index, (inputs, labels) in (enumerate(tqdm(dataloader))):
         inputs, labels = inputs.to(DEVICE), labels.to(DEVICE)
 
         optimizer.zero_grad()
@@ -72,7 +73,7 @@ for epoch in range(EPOCHS):
 
         optimizer.step()
 
-        if index % 5 == 0:
+        if index % 100 == 0:
             history["train"].append({
                 "epoch": epoch,
                 "loss": loss.item(),
@@ -91,7 +92,6 @@ for epoch in range(EPOCHS):
             history["val"].append({"epoch": epoch, "accuracy": accuracy})
             msg = f"Val accuracy: {accuracy}"
             log_to_file(msg)
-            print(msg)
 
             torch.save(model.state_dict(), f"{SAVE_PATH}/model_latest.pth")
 
