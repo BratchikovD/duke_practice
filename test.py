@@ -13,9 +13,8 @@ from experiments.helpers.utils import get_all_embeddings
 
 if __name__ == '__main__':
     freeze_support()
-    IMAGE_SIZE = 128
-    BATCH_SIZE = 200
-    EMBEDDING_SIZE = 64
+    IMAGE_SIZE = 224
+
 
     BASE_DIR = Path(__file__).parent
     DATA_DIR = os.path.join(BASE_DIR, 'data')
@@ -50,8 +49,8 @@ if __name__ == '__main__':
     for i, idx in enumerate(np.random.choice(len(test_dataset), size=25, replace=False)):
         matched_idx = dist[idx].argmin().item()
 
-        actual_label = test_dataset.labels[idx]
-        predicted_label = val_dataset.labels[matched_idx]
+        actual_label = test_labels.cpu().numpy()
+        predicted_label = val_labels.cpu().numpy()
 
         actual_image_path = test_dataset.images[idx]
         predicted_image_path = val_dataset.images[matched_idx]
