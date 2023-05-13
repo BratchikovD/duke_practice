@@ -31,7 +31,7 @@ data_transforms = {
 train_dataset = ImageFolder(TRAIN_DIR, data_transforms['train'])
 val_dataset = ImageFolder(VAL_DIR, data_transforms['train'])
 
-dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=32,
+dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=256,
                                          shuffle=True, num_workers=2, pin_memory=True,
                                          prefetch_factor=2, persistent_workers=True)
 
@@ -81,7 +81,6 @@ for epoch in range(EPOCHS):
             })
             msg = f"Эпоха [{epoch}/{EPOCHS}] Итерация [{index}/{len(dataloader)}, Loss: {loss.item()}, Triplets: {mining_func.num_triplets}\]\n"
             log_to_file(msg)
-            print(msg)
 
     if epoch % 2 == 0:
         model.eval()
