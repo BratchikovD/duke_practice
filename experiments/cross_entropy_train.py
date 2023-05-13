@@ -10,8 +10,8 @@ from results import ft_net
 import os
 import time
 
-from experiments.utils.network_save import save_network
-from experiments.utils.graphics import draw_curve
+from experiments.helpers.utils import save_network
+from experiments.helpers.utils import draw_curve
 version = torch.__version__
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
