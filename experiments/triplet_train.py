@@ -180,6 +180,6 @@ if __name__ == '__main__':
     # record every run
     copyfile('triplet_train.py', os.path.join(dir_name, 'train.py'))
 
-    criterion = nn.TripletMarginLoss
+    criterion = nn.TripletMarginLoss(margin=0)
 
     model = train_model(model, criterion, optimizer_ft, exp_lr_scheduler)
