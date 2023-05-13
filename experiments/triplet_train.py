@@ -3,6 +3,7 @@ from pathlib import Path
 from shutil import copyfile
 import os
 import torch
+from tqdm import tqdm
 from torch import optim, nn
 from torch.autograd import Variable
 from torch.backends import cudnn
@@ -87,9 +88,8 @@ if __name__ == '__main__':
                 running_loss = 0.0
                 running_corrects = 0.0
 
-                for iter, data in enumerate(dataloaders[phase]):
+                for iter, data in enumerate(tqdm(dataloaders[phase], desc="Training", leave=False)):
                     anchor_images, pos_images, neg_images, labels = data
-
                     now_batch_size, c, h, w = anchor_images.shape
                     if now_batch_size < 32:
                         continue
