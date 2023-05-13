@@ -118,7 +118,9 @@ if __name__ == '__main__':
                     _, preds = torch.max(anchor_outputs.data, 1)
                     loss = criterion(anchor_outputs, pos_outputs, neg_outputs)
 
-                    del inputs
+                    del anchor_images
+                    del pos_images
+                    del neg_images
 
                     if phase == 'train':
                         loss.backward()
