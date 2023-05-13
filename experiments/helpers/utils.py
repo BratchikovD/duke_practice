@@ -21,10 +21,10 @@ def get_accuracy(val_dataset, train_dataset, model, device):
         # for each val embedding, find distance with all embeddings in train embeddings
         dist = torch.cdist(val_embeddings, train_embeddings)
 
-    query_labels = np.array(val_dataset.labels)
+    query_labels = val_labels.cpu().numpy()
     # Find index of closesest matching embedding
     matched_idx = torch.argmin(dist, axis=1).cpu().numpy()
-    matched_labels = np.array(train_dataset.labels)[matched_idx]
+    matched_labels = train_labels.cpu().numpy()[matched_idx]
 
     accuracy = (query_labels == matched_labels).mean()
     return accuracy
