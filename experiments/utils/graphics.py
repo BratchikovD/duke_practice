@@ -3,7 +3,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-BASE_DIR = Path(__file__).parent.parent
+BASE_DIR = Path(__file__).parent.parent.parent
 
 def draw_curve(current_epoch, y_loss, y_err, experiment):
     x_epoch = list(range(current_epoch + 1))
