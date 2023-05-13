@@ -8,7 +8,7 @@ from torchvision import transforms
 from torchvision import models
 from helpers.utils import log_to_file, get_accuracy
 from pytorch_metric_learning import miners, distances, losses
-
+from tqdm import tqdm
 BASE_DIR = Path(__file__).parent.parent
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 TRAIN_DIR = os.path.join(DATA_DIR, 'train')
@@ -59,7 +59,7 @@ for epoch in range(EPOCHS):
     model.to(DEVICE)
     model.train()
 
-    for index, (inputs, labels) in enumerate(dataloader):
+    for index, (inputs, labels) in tqdm(enumerate(dataloader)):
         inputs, labels = inputs.to(DEVICE), labels.to(DEVICE)
 
         optimizer.zero_grad()
