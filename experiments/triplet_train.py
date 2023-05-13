@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     image_dataset = TripletImageFolder(TRAIN_DIR, data_transforms['train'])
 
-    dataloader = torch.utils.data.DataLoader(image_dataset, batch_size=64,
+    dataloader = torch.utils.data.DataLoader(image_dataset, batch_size=32,
                                               shuffle=True, num_workers=2, pin_memory=True,
                                               prefetch_factor=2, persistent_workers=True)
 
