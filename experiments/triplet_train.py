@@ -24,8 +24,6 @@ if __name__ == '__main__':
 
     transform_train_list = [
         transforms.Resize((h, w), interpolation=3),
-        transforms.RandomRotation(15),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
         transforms.Pad(10),
         transforms.RandomCrop((h, w)),
         transforms.RandomHorizontalFlip(),
@@ -76,6 +74,7 @@ if __name__ == '__main__':
     os.makedirs(SAVE_PATH, exist_ok=True)
     if os.path.exists(f"{SAVE_PATH}/training.log"):
         os.remove("training.log")
+
 
     for epoch in range(EPOCHS):
         model.to(DEVICE)
