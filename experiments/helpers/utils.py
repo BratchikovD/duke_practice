@@ -1,3 +1,4 @@
+import os
 import re
 import torch
 from matplotlib import pyplot as plt
@@ -33,13 +34,13 @@ def get_accuracy(val_dataset, train_dataset, model, device):
     return accuracy
 
 
-def plot_embeddings(embeddings, epoch):
+def plot_embeddings(embeddings, epoch, save_path):
     tsne = TSNE(n_components=2, random_state=42)
     embeddings, labels = embeddings
-    embeddings_tsne = tsne.fit_transform(embeddings)
+    embeddings_tsne = tsne.fit_transform(embeddings.cpu())
 
     plt.figure(figsize=(10,10))
     for idx, label in enumerate(labels):
         plt.scatter(*embeddings_tsne[idx])
     plt.title(f'Embeddings at epoch {epoch}')
-    plt.show()
+    plt.savefig(os.path.join(save_path, f'embeddings_{epoch}.svg'))

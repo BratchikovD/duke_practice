@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
                 embeddings = get_all_embeddings(val_dataset, model, DEVICE)
 
-                plot_embeddings(embeddings, epoch)
+                plot_embeddings(embeddings, epoch, SAVE_PATH)
 
                 history["val"].append({"epoch": epoch, "accuracy": accuracy})
                 msg = f"Val accuracy: {accuracy}"
