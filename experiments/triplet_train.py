@@ -44,7 +44,7 @@ if __name__ == '__main__':
     class_names = train_dataset.classes
 
     DEVICE = torch.device("cuda:0")
-    TRIPLETS_TYPE = "semihard"
+    TRIPLETS_TYPE = "all"
     model = models.resnet50(pretrained=True).cuda()
     distance = distances.CosineSimilarity()
     criterion = losses.TripletMarginLoss(margin=0.2, distance=distance)

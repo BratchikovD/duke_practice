@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
                 for iter, data in enumerate(dataloaders[phase]):
                     anchor_images, pos_images, neg_images, labels = data
-
+                    print(type(labels))
                     now_batch_size, c, h, w = anchor_images.shape
                     if now_batch_size < 32:
                         continue
@@ -118,7 +118,9 @@ if __name__ == '__main__':
                     _, preds = torch.max(anchor_outputs.data, 1)
                     loss = criterion(anchor_outputs, pos_outputs, neg_outputs)
 
-                    del inputs
+                    del anchor_images
+                    del pos_images
+                    del neg_images
 
                     if phase == 'train':
                         loss.backward()
@@ -178,6 +180,6 @@ if __name__ == '__main__':
     # record every run
     copyfile('triplet_train.py', os.path.join(dir_name, 'train.py'))
 
-    criterion = nn.TripletMarginLoss
+    criterion = nn.TripletMarginLoss(margin=0)
 
     model = train_model(model, criterion, optimizer_ft, exp_lr_scheduler)
