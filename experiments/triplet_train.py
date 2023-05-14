@@ -24,6 +24,8 @@ if __name__ == '__main__':
 
     transform_train_list = [
         transforms.Resize((h, w), interpolation=3),
+        transforms.RandomRotation(15),
+        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
         transforms.Pad(10),
         transforms.RandomCrop((h, w)),
         transforms.RandomHorizontalFlip(),
@@ -44,7 +46,6 @@ if __name__ == '__main__':
 
     train_dataset = ImageFolder(TRAIN_DIR, data_transforms['train'])
     val_dataset = ImageFolder(VAL_DIR, data_transforms['val'])
-
     BATCH_SIZE = 64
     dataloader = {'train': torch.utils.data.DataLoader(train_dataset, batch_size=BATCH_SIZE,
                                              shuffle=True, num_workers=2, pin_memory=True,
@@ -56,17 +57,18 @@ if __name__ == '__main__':
 
     dataset_size = len(train_dataset)
     class_names = train_dataset.classes
-
+    labels_size = len(val_dataset.classes)
     DEVICE = torch.device("cuda:0")
     TRIPLETS_TYPE = "all"
     model = models.resnet50(pretrained=True).cuda()
+
     distance = distances.CosineSimilarity()
     criterion = losses.TripletMarginLoss(margin=0.2, distance=distance)
     mining_func = miners.TripletMarginMiner(margin=0.2, distance=distance, type_of_triplets=TRIPLETS_TYPE)
     optimizer = optim.SGD([
         {'params': model.parameters(), 'lr': 0.001},
     ], weight_decay=5e-4, momentum=0.9, nesterov=True)
-
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=25 * 2 // 3, gamma=0.1)
     EPOCHS = 25
     SAVE_PATH = f'../results/TripletLoss_{EPOCHS}_{BATCH_SIZE}_{TRIPLETS_TYPE}'
     history = {"train": [], "val": [], "best_accuracy": 0.0}
@@ -123,3 +125,4 @@ if __name__ == '__main__':
 
                 with open(f"{SAVE_PATH}/history.json", "w") as f:
                     f.write(json.dumps(history))
+        scheduler.step()
