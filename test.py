@@ -49,11 +49,11 @@ if __name__ == '__main__':
     for i, idx in enumerate(np.random.choice(len(test_dataset), size=25, replace=False)):
         matched_idx = dist[idx].argmin().item()
 
-        actual_label = test_labels.cpu().numpy()
-        predicted_label = val_labels.cpu().numpy()
+        actual_label = test_labels[idx].item()
+        predicted_label = val_labels[idx].item()
 
-        actual_image_path = test_dataset.images[idx]
-        predicted_image_path = val_dataset.images[matched_idx]
+        actual_image_path = test_dataset.images[idx][0]
+        predicted_image_path = val_dataset.images[matched_idx][0]
 
         actual_image = np.array(Image.open(actual_image_path).resize((IMAGE_SIZE, IMAGE_SIZE)))
         predicted_image = np.array(Image.open(predicted_image_path).resize((IMAGE_SIZE, IMAGE_SIZE)))
