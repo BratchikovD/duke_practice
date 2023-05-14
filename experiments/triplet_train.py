@@ -24,21 +24,35 @@ if __name__ == '__main__':
 
     transform_train_list = [
         transforms.Resize((h, w), interpolation=3),
+        transforms.Pad(10),
+        transforms.RandomCrop((h, w)),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ]
+
+    transform_val_list = [
+        transforms.Resize((h, w), interpolation=3),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]
 
     data_transforms = {
         'train': transforms.Compose(transform_train_list),
+        'val': transforms.Compose(transform_val_list)
     }
 
     train_dataset = ImageFolder(TRAIN_DIR, data_transforms['train'])
-    val_dataset = ImageFolder(VAL_DIR, data_transforms['train'])
+    val_dataset = ImageFolder(VAL_DIR, data_transforms['val'])
 
     BATCH_SIZE = 64
-    dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=BATCH_SIZE,
+    dataloader = {'train': torch.utils.data.DataLoader(train_dataset, batch_size=BATCH_SIZE,
+                                             shuffle=True, num_workers=2, pin_memory=True,
+                                             prefetch_factor=2, persistent_workers=True),
+                  'val': torch.utils.data.DataLoader(val_dataset, batch_size=BATCH_SIZE,
                                              shuffle=True, num_workers=2, pin_memory=True,
                                              prefetch_factor=2, persistent_workers=True)
+                  }
 
     dataset_size = len(train_dataset)
     class_names = train_dataset.classes
@@ -65,7 +79,7 @@ if __name__ == '__main__':
         model.to(DEVICE)
         model.train()
 
-        for index, (inputs, labels) in (enumerate(tqdm(dataloader, desc="Training", leave=False))):
+        for index, (inputs, labels) in (enumerate(tqdm(dataloader['train'], desc="Training", leave=False))):
             inputs, labels = inputs.to(DEVICE), labels.to(DEVICE)
 
             optimizer.zero_grad()
@@ -87,7 +101,7 @@ if __name__ == '__main__':
                 msg = f"Эпоха [{epoch}/{EPOCHS}] Итерация [{index}/{len(dataloader)}, Loss: {loss.item()}, Triplets: {mining_func.num_triplets}\]\n"
                 log_to_file(msg)
 
-        if epoch % 2 == 0:
+        if epoch % 5 == 0:
             model.eval()
 
             with torch.no_grad():
