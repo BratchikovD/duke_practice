@@ -1,7 +1,10 @@
 import re
 import torch
+from matplotlib import pyplot as plt
 from pytorch_metric_learning import testers
 import numpy as np
+from sklearn.manifold import TSNE
+
 
 def get_all_embeddings(dataset, model, device):
     tester = testers.BaseTester(data_device=device)
@@ -28,3 +31,15 @@ def get_accuracy(val_dataset, train_dataset, model, device):
 
     accuracy = (query_labels == matched_labels).mean()
     return accuracy
+
+
+def plot_embeddings(embeddings, epoch):
+    tsne = TSNE(n_components=2, random_state=42)
+    embeddings, labels = embeddings
+    embeddings_tsne = tsne.fit_transform(embeddings)
+
+    plt.figure(figsize=(10,10))
+    for idx, label in enumerate(labels):
+        plt.scatter(*embeddings_tsne[idx])
+    plt.title(f'Embeddings at epoch {epoch}')
+    plt.show()

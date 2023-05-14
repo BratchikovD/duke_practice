@@ -7,7 +7,7 @@ from torchvision.datasets import ImageFolder
 from torch import optim
 from torchvision import transforms
 from torchvision import models
-from helpers.utils import log_to_file, get_accuracy
+from helpers.utils import log_to_file, get_accuracy, get_all_embeddings, plot_embeddings
 from pytorch_metric_learning import miners, distances, losses
 from tqdm import tqdm
 
@@ -92,6 +92,10 @@ if __name__ == '__main__':
 
             with torch.no_grad():
                 accuracy = get_accuracy(val_dataset, train_dataset, model, DEVICE)
+
+                embeddings = get_all_embeddings(val_dataset, model, DEVICE)
+
+                plot_embeddings(embeddings, epoch)
 
                 history["val"].append({"epoch": epoch, "accuracy": accuracy})
                 msg = f"Val accuracy: {accuracy}"
