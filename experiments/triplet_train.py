@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     train_dataset = ImageFolder(TRAIN_DIR, data_transforms['train'])
     val_dataset = ImageFolder(VAL_DIR, data_transforms['val'])
-    BATCH_SIZE = 512
+    BATCH_SIZE = 256
     dataloader = {'train': torch.utils.data.DataLoader(train_dataset, batch_size=BATCH_SIZE,
                                              shuffle=True, num_workers=2, pin_memory=True,
                                              prefetch_factor=2, persistent_workers=True),
