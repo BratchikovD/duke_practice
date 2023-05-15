@@ -36,7 +36,7 @@ def get_accuracy(val_dataset, train_dataset, model, device):
 
 def plot_embeddings(embeddings, labels, epoch, save_path):
     tsne = TSNE(n_components=2)
-    embeddings_tsne = tsne.fit_transform(embeddings)
+    embeddings_tsne = tsne.fit_transform(embeddings.cpu().numpy())
 
     fig, ax = plt.subplots(figsize=(10, 10))
     for i, label in enumerate(labels):
