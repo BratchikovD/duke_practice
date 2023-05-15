@@ -7,6 +7,8 @@ from torchvision.datasets import ImageFolder
 from torch import optim
 from torchvision import transforms
 from torchvision import models
+from torchvision.models import ResNet50_Weights
+
 from helpers.utils import log_to_file, get_accuracy, get_all_embeddings, plot_embeddings
 from pytorch_metric_learning import miners, distances, losses
 from tqdm import tqdm
@@ -58,15 +60,15 @@ if __name__ == '__main__':
     labels_size = len(val_dataset.classes)
     DEVICE = torch.device("cuda:0")
     TRIPLETS_TYPE = "all"
-    model = models.resnet50(pretrained=True).cuda()
+    model = models.resnet50(weights=ResNet50_Weights.IMAGENET1K_V2).cuda()
 
     distance = distances.CosineSimilarity()
     criterion = losses.TripletMarginLoss(margin=0.2, distance=distance)
     mining_func = miners.TripletMarginMiner(margin=0.2, distance=distance, type_of_triplets=TRIPLETS_TYPE)
     optimizer = optim.SGD([
-        {'params': model.parameters(), 'lr': 0.001},
+        {'params': model.parameters(), 'lr': 0.002},
     ], weight_decay=5e-4, momentum=0.9, nesterov=True)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=25 * 2 // 3, gamma=0.1)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
     EPOCHS = 25
     SAVE_PATH = f'../results/TripletLoss_{EPOCHS}_{BATCH_SIZE}_{TRIPLETS_TYPE}'
     history = {"train": [], "val": [], "best_accuracy": 0.0}
