@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     train_dataset = ImageFolder(TRAIN_DIR, data_transforms['train'])
     val_dataset = ImageFolder(VAL_DIR, data_transforms['val'])
-    BATCH_SIZE = 64
+    BATCH_SIZE = 512
     dataloader = {'train': torch.utils.data.DataLoader(train_dataset, batch_size=BATCH_SIZE,
                                              shuffle=True, num_workers=2, pin_memory=True,
                                              prefetch_factor=2, persistent_workers=True),
@@ -68,15 +68,15 @@ if __name__ == '__main__':
     optimizer = optim.SGD([
         {'params': model.parameters(), 'lr': 0.002},
     ], weight_decay=5e-4, momentum=0.9, nesterov=True)
+
     scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
-    EPOCHS = 25
+    EPOCHS = 60
     SAVE_PATH = f'../results/TripletLoss_{EPOCHS}_{BATCH_SIZE}_{TRIPLETS_TYPE}'
     history = {"train": [], "val": [], "best_accuracy": 0.0}
 
     os.makedirs(SAVE_PATH, exist_ok=True)
     if os.path.exists(f"{SAVE_PATH}/training.log"):
         os.remove("training.log")
-
 
     for epoch in range(EPOCHS):
         model.to(DEVICE)
