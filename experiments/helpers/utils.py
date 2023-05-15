@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 from pytorch_metric_learning import testers
 import numpy as np
 from sklearn.manifold import TSNE
+import matplotlib.cm as cm
 
 
 def get_all_embeddings(dataset, model, device):
@@ -42,17 +43,27 @@ def plot_embeddings(embeddings, labels, epoch, save_path, class_nums=20):
     for embedding, label in zip(embeddings, labels):
         embeddings_by_class[label.item()].append(embedding.cpu().numpy())
 
-    random_classes = random.sample(list(embeddings_by_class.keys()), 20)
+    random_classes = random.sample(list(embeddings_by_class.keys()), class_nums)
 
     random_embeddings = {class_name: embeddings_by_class[class_name] for class_name in random_classes}
-    all_random_embeddings = np.concatenate(list(random_embeddings.values()))
+
+    all_random_embeddings = []
+    all_labels = []
+    for class_name, embeddings in random_embeddings.items():
+        for embedding in embeddings:
+            all_random_embeddings.append(embedding)
+            all_labels.append(class_name)
+
     embeddings_2d = TSNE(n_components=2).fit_transform(all_random_embeddings)
+
+    unique_labels = list(set(all_labels))
+    colors = cm.tab20(np.arange(len(unique_labels)))
+    color_map = dict(zip(unique_labels, colors))
 
     fig, ax = plt.subplots(figsize=(10, 10))
 
-    plt.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1])
+    for i in range(embeddings_2d.shape[0]):
+        ax.scatter(embeddings_2d[i, 0], embeddings_2d[i, 1], color=color_map[all_labels[i]])
     plt.title(f"Embeddings at epoch {epoch}")
-    plt.savefig(f"{save_path}/embeddings_epoch_{epoch}.png")
+    plt.savefig(f"{save_path}/embeddings_epoch_{epoch}.svg")
     plt.close()
-
-    plt.savefig(os.path.join(save_path, f'embeddings_{epoch}.svg'))
