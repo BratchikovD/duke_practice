@@ -86,6 +86,7 @@ if __name__ == '__main__':
             inputs, labels = inputs.to(DEVICE), labels.to(DEVICE)
 
             optimizer.zero_grad()
+
             embeddings = model(inputs)
 
             triplets = mining_func(embeddings, labels)
@@ -95,16 +96,16 @@ if __name__ == '__main__':
 
             optimizer.step()
 
-            if index % 100 == 0:
+            if index % 50 == 0 or index == len(dataloader['train']):
                 history["train"].append({
                     "epoch": epoch,
                     "loss": loss.item(),
                     "triplets": mining_func.num_triplets
                 })
-                msg = f"Эпоха [{epoch}/{EPOCHS}] Итерация [{index}/{len(dataloader)}, Loss: {loss.item()}, Triplets: {mining_func.num_triplets}\]\n"
+                msg = f"Эпоха [{epoch}/{EPOCHS}] Итерация [{index}/{len(dataloader['train'])}, Loss: {loss.item()}, Triplets: {mining_func.num_triplets}\]\n"
                 log_to_file(msg)
 
-        if epoch % 5 == 0:
+        if epoch % 5 == 0 or epoch == EPOCHS:
             model.eval()
 
             with torch.no_grad():

@@ -34,13 +34,15 @@ def get_accuracy(val_dataset, train_dataset, model, device):
     return accuracy
 
 
-def plot_embeddings(embeddings, epoch, save_path):
-    tsne = TSNE(n_components=2, random_state=42)
-    embeddings, labels = embeddings
-    embeddings_tsne = tsne.fit_transform(embeddings.cpu())
+def plot_embeddings(embeddings, labels, epoch, save_path):
+    tsne = TSNE(n_components=2)
+    embeddings_tsne = tsne.fit_transform(embeddings.cpu().numpy())
 
-    plt.figure(figsize=(10,10))
-    for idx, label in enumerate(labels):
-        plt.scatter(*embeddings_tsne[idx])
-    plt.title(f'Embeddings at epoch {epoch}')
+    fig, ax = plt.subplots(figsize=(10, 10))
+    for i, label in enumerate(labels):
+        ax.text(embeddings_tsne[i, 0], embeddings_tsne[i, 1], label, fontsize=8)
+    plt.title(f"Embeddings at epoch {epoch}")
+    plt.savefig(f"{save_path}/embeddings_epoch_{epoch}.png")
+    plt.close()
+
     plt.savefig(os.path.join(save_path, f'embeddings_{epoch}.svg'))
