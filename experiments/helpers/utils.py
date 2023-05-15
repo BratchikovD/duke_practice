@@ -1,5 +1,7 @@
 import os
 import re
+from collections import defaultdict
+import random
 import torch
 from matplotlib import pyplot as plt
 from pytorch_metric_learning import testers
@@ -34,13 +36,21 @@ def get_accuracy(val_dataset, train_dataset, model, device):
     return accuracy
 
 
-def plot_embeddings(embeddings, labels, epoch, save_path):
-    tsne = TSNE(n_components=2)
-    embeddings_tsne = tsne.fit_transform(embeddings.cpu().numpy())
+def plot_embeddings(embeddings, labels, epoch, save_path, class_nums=20):
+
+    embeddings_by_class = defaultdict(list)
+    for embedding, label in zip(embeddings, labels):
+        embeddings_by_class[label.item()].append(embedding.cpu().numpy())
+
+    random_classes = random.sample(list(embeddings_by_class.keys()), 20)
+
+    random_embeddings = {class_name: embeddings_by_class[class_name] for class_name in random_classes}
+    all_random_embeddings = np.concatenate(list(random_embeddings.values()))
+    embeddings_2d = TSNE(n_components=2).fit_transform(all_random_embeddings)
 
     fig, ax = plt.subplots(figsize=(10, 10))
-    for i, label in enumerate(labels):
-        ax.text(embeddings_tsne[i, 0], embeddings_tsne[i, 1], label, fontsize=8)
+
+    plt.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1])
     plt.title(f"Embeddings at epoch {epoch}")
     plt.savefig(f"{save_path}/embeddings_epoch_{epoch}.png")
     plt.close()

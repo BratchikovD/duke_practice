@@ -111,9 +111,9 @@ if __name__ == '__main__':
             with torch.no_grad():
                 accuracy = get_accuracy(val_dataset, train_dataset, model, DEVICE)
 
-                embeddings = get_all_embeddings(train_dataset, model, DEVICE)
+                embeddings, labels = get_all_embeddings(train_dataset, model, DEVICE)
 
-                plot_embeddings(embeddings, epoch, SAVE_PATH)
+                plot_embeddings(embeddings, labels, epoch, SAVE_PATH)
 
                 history["val"].append({"epoch": epoch, "accuracy": accuracy})
                 msg = f"Val accuracy: {accuracy}"
