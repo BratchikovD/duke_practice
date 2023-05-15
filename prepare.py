@@ -30,6 +30,7 @@ if not os.path.isdir(QUERY_DIR):
 
 for root, dirs, files in os.walk(TRAIN_DATA, topdown=True):
     print("Обрабатываем изображения в bounding_box_train")
+    images_in_val = 0
     for name in files:
         ID = name.split('_')[0]
         TRAIN_ID_DIR = os.path.join(TRAIN_DIR, ID)
@@ -37,7 +38,9 @@ for root, dirs, files in os.walk(TRAIN_DATA, topdown=True):
         if not os.path.isdir(TRAIN_ID_DIR):
             os.mkdir(TRAIN_ID_DIR)
             os.mkdir(VAL_ID_DIR)
+        if images_in_val < 5:
             copyfile(os.path.join(TRAIN_DATA, name), os.path.join(VAL_ID_DIR, name))
+            images_in_val += 1
         else:
             copyfile(os.path.join(TRAIN_DATA, name), os.path.join(TRAIN_ID_DIR, name))
 
