@@ -54,6 +54,8 @@ def plot_embeddings(embeddings, labels, epoch, save_path, class_nums=20):
             all_random_embeddings.append(embedding)
             all_labels.append(class_name)
 
+    all_random_embeddings = np.array(all_random_embeddings)
+
     embeddings_2d = TSNE(n_components=2).fit_transform(all_random_embeddings)
 
     unique_labels = list(set(all_labels))
