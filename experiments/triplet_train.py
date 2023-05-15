@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
     train_dataset = ImageFolder(TRAIN_DIR, data_transforms['train'])
     val_dataset = ImageFolder(VAL_DIR, data_transforms['val'])
-    BATCH_SIZE = 64
+    BATCH_SIZE = 128
     dataloader = {'train': torch.utils.data.DataLoader(train_dataset, batch_size=BATCH_SIZE,
                                              shuffle=True, num_workers=2, pin_memory=True,
                                              prefetch_factor=2, persistent_workers=True),
@@ -66,8 +66,7 @@ if __name__ == '__main__':
     optimizer = optim.SGD([
         {'params': model.parameters(), 'lr': 0.001},
     ], weight_decay=5e-4, momentum=0.9, nesterov=True)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=25 * 2 // 3, gamma=0.1)
-    EPOCHS = 25
+    EPOCHS = 100
     SAVE_PATH = f'../results/TripletLoss_{EPOCHS}_{BATCH_SIZE}_{TRIPLETS_TYPE}'
     history = {"train": [], "val": [], "best_accuracy": 0.0}
 
@@ -75,15 +74,15 @@ if __name__ == '__main__':
     if os.path.exists(f"{SAVE_PATH}/training.log"):
         os.remove("training.log")
 
-
     for epoch in range(EPOCHS):
         model.to(DEVICE)
         model.train()
 
-        for index, (inputs, labels) in (enumerate(tqdm(dataloader['train'], desc="Training", leave=False))):
+        for index, (inputs, labels) in (enumerate(dataloader['train'])):
             inputs, labels = inputs.to(DEVICE), labels.to(DEVICE)
 
             optimizer.zero_grad()
+
             embeddings = model(inputs)
 
             triplets = mining_func(embeddings, labels)
@@ -93,16 +92,16 @@ if __name__ == '__main__':
 
             optimizer.step()
 
-            if index % 100 == 0:
+            if index % 50 == 0 or index == len(dataloader['train']):
                 history["train"].append({
                     "epoch": epoch,
                     "loss": loss.item(),
                     "triplets": mining_func.num_triplets
                 })
-                msg = f"Эпоха [{epoch}/{EPOCHS}] Итерация [{index}/{len(dataloader)}, Loss: {loss.item()}, Triplets: {mining_func.num_triplets}\]\n"
+                msg = f"Эпоха [{epoch}/{EPOCHS}] Итерация [{index}/{len(dataloader['train'])}, Loss: {loss.item()}, Triplets: {mining_func.num_triplets}\]\n"
                 log_to_file(msg)
-
-        if epoch % 5 == 0:
+                print(msg)
+        if epoch % 5 == 0 or epoch == EPOCHS:
             model.eval()
 
             with torch.no_grad():
@@ -124,4 +123,3 @@ if __name__ == '__main__':
 
                 with open(f"{SAVE_PATH}/history.json", "w") as f:
                     f.write(json.dumps(history))
-        scheduler.step()
