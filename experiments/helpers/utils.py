@@ -34,25 +34,15 @@ def get_accuracy(val_dataset, train_dataset, model, device):
     return accuracy
 
 
-def plot_embeddings(embeddings, epoch, save_path, num_classes=20):
-    tsne = TSNE(n_components=2, random_state=42)
+def plot_embeddings(embeddings, labels, epoch, save_path):
+    tsne = TSNE(n_components=2)
+    embeddings_tsne = tsne.fit_transform(embeddings)
 
-    embeddings, labels = embeddings
-    unique_classes = np.unique(labels)
-    selected_classes = np.random.choice(unique_classes, num_classes, replace=False)
-    indices = np.isin(labels, selected_classes)
-    embeddings = embeddings[indices]
-    labels = labels[indices]
+    fig, ax = plt.subplots(figsize=(10, 10))
+    for i, label in enumerate(labels):
+        ax.text(embeddings_tsne[i, 0], embeddings_tsne[i, 1], label, fontsize=8)
+    plt.title(f"Embeddings at epoch {epoch}")
+    plt.savefig(f"{save_path}/embeddings_epoch_{epoch}.png")
+    plt.close()
 
-    embeddings_tsne = tsne.fit_transform(embeddings.cpu())
-
-    cmap = plt.cm.get_cmap('rainbow', num_classes)
-
-    plt.figure(figsize=(10,10))
-    for idx, label in enumerate(labels):
-
-        class_idx = np.where(selected_classes == label)[0][0]
-        plt.scatter(*embeddings_tsne[idx], color=cmap(class_idx), label=str(label))
-    plt.title(f'Embeddings at epoch {epoch}')
-    plt.legend()
     plt.savefig(os.path.join(save_path, f'embeddings_{epoch}.svg'))
