@@ -7,7 +7,7 @@ plt.style.use("ggplot")
 import json
 
 BASE_DIR = Path(__file__).parent.parent
-LOG_PATH = os.path.join(BASE_DIR, 'results', 'TripletLoss_25_64_hard', 'history.json')
+LOG_PATH = os.path.join(BASE_DIR, 'results', 'TripletLoss_60_256_all', 'history.json')
 with open(LOG_PATH, "r") as f:
     data = json.loads(f.read())
     epoch_train, loss = [x['epoch'] for x in data['train']], [x['loss'] for x in data['train']]
