@@ -2,7 +2,7 @@ import os
 from shutil import copyfile
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'DukeMTMC-reID1')
+DATA_DIR = os.path.join(BASE_DIR, 'dukemtmc-reid/DukeMTMC-reID')
 PARSED_DATA_DIR = os.path.join(BASE_DIR, 'data')
 if not os.path.isdir(DATA_DIR):
     print("Отсутствет папка с данными.")
