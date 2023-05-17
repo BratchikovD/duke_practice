@@ -41,7 +41,7 @@ model = torchreid.models.build_model(
     num_classes=datamanager.num_train_pids,
     loss=args.loss
 )
-
+model.cuda()
 optimizer = torchreid.optim.build_optimizer(
     model,
     optim=args.optimizer,
