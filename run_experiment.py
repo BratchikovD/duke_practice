@@ -20,7 +20,7 @@ parser.add_argument('--sc_step_size', default=20, help='Scheduler шаг.')
 parser.add_argument('--batch_size', default=32, help='Размера батча.')
 parser.add_argument('--lr', default=0.0003, help='Задаёт learning rate для оптимизатора.')
 parser.add_argument('--epochs', default=60, help='Количество эпох.')
-parser.add_argument('--visualize', action='store_false', help='Визуализирует изображения результатов ранкинга.')
+parser.add_argument('--visualize', action='store_true', default=False, help='Визуализирует изображения результатов ранкинга.')
 parser.add_argument('--log_path', help='Путь сохранения лога обучения.')
 
 args = parser.parse_args()
