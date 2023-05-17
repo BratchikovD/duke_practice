@@ -71,7 +71,7 @@ if not os.path.isdir('./log'):
 
 engine.run(
     max_epoch=args.epochs,
-    save_dir=f'log/resnet50-{args.loss}-{args.epoch}' if not args.log_path else args.log_path,
+    save_dir=f'log/resnet50-{args.loss}-{args.epochs}' if not args.log_path else args.log_path,
     print_freq=15
 )
 
