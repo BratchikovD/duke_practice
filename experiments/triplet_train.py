@@ -12,7 +12,7 @@ from helpers.utils import log_to_file, get_all_embeddings, plot_embeddings
 from pytorch_metric_learning import miners, distances, losses, samplers
 from tqdm import tqdm
 import torchreid
-
+from torchreid import metrics
 
 
 if __name__ == '__main__':
@@ -60,7 +60,6 @@ if __name__ == '__main__':
                                             pin_memory=True, prefetch_factor=2, persistent_workers=True)
     }
     model = models.resnet50(pretrained=True).cuda()
-    accuracy = torchreid.metrics.accuracy
     distance = distances.CosineSimilarity()
     criterion = losses.TripletMarginLoss(margin=0.3)
     mining_func = miners.TripletMarginMiner(margin=0.3, type_of_triplets=TRIPLETS_TYPE)
@@ -108,11 +107,11 @@ if __name__ == '__main__':
 
             with torch.no_grad():
                 embeddings, labels = get_all_embeddings(train_set, model, DEVICE)
-                train_accuracy = accuracy(embeddings, labels, topk=(1, ))
+                train_accuracy = metrics.accuracy(embeddings, labels, topk=(1, ))
                 print(train_accuracy)
                 plot_embeddings(embeddings, labels, epoch, SAVE_PATH)
                 history["val"].append({"epoch": epoch, "accuracy": train_accuracy})
-                msg = f"Train accuracy: {accuracy}"
+                msg = f"Train accuracy: {train_accuracy}"
                 log_to_file(msg)
                 print(msg)
                 torch.save(model.state_dict(), f"{SAVE_PATH}/model_latest.pth")
