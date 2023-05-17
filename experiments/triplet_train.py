@@ -108,9 +108,10 @@ if __name__ == '__main__':
 
             with torch.no_grad():
                 embeddings, labels = get_all_embeddings(train_set, model, DEVICE)
-
+                train_accuracy = accuracy(embeddings, labels, topk=(1, ))
+                print(train_accuracy)
                 plot_embeddings(embeddings, labels, epoch, SAVE_PATH)
-                history["val"].append({"epoch": epoch, "accuracy": accuracy(embeddings, labels, topk=1)})
+                history["val"].append({"epoch": epoch, "accuracy": train_accuracy})
                 msg = f"Train accuracy: {accuracy}"
                 log_to_file(msg)
                 print(msg)
