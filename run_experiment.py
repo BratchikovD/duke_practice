@@ -66,12 +66,12 @@ elif args.loss == 'softmax':
 else:
     raise NotImplementedError
 
-if not os.path.isdir('./log'):
-    os.mkdir('log')
+if not os.path.isdir('./logs'):
+    os.mkdir('logs')
 
 engine.run(
     max_epoch=args.epochs,
-    save_dir=f'log/resnet50-{args.loss}-{args.epochs}' if not args.log_path else args.log_path,
+    save_dir=f'logs/resnet50-{args.loss}-{args.epochs}' if not args.log_path else args.log_path,
     print_freq=15
 )
 
