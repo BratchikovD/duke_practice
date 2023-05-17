@@ -116,8 +116,8 @@ if __name__ == '__main__':
                 print(msg)
                 torch.save(model.state_dict(), f"{SAVE_PATH}/model_latest.pth")
 
-                if accuracy >= history["best_accuracy"]:
-                    history["best_accuracy"] = accuracy
+                if train_accuracy >= history["best_accuracy"]:
+                    history["best_accuracy"] = train_accuracy
                     torch.save(model.state_dict(), f"{SAVE_PATH}/model_best.pth")
 
                 with open(f"{SAVE_PATH}/history.json", "w") as f:
