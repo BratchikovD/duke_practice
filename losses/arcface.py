@@ -37,15 +37,17 @@ class ArcFaceLoss(nn.Module):
         one_hot.scatter_(1, targets.view(-1, 1), 1)
 
         output = (one_hot * phi) + ((1.0 - one_hot) * cosine)
-        output *= self.s
+        output *= self.feature_scale
 
         return F.cross_entropy(output, targets)
 
+    @property
     def feature_scale(self):
         B_avg = torch.exp(self.avg_cosine.log()) - self.eps
         s = torch.sqrt(2) * torch.log(torch.tensor(self.out_features - 1, dtype=torch.float32)) / torch.max(self.margin, B_avg)
         return s.cuda()
 
+    @property
     def avg_cosine(self):
         cosine = F.linear(F.normalize(self.inputs), F.normalize(self.weight))
         return torch.mean(cosine)
