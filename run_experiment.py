@@ -3,6 +3,7 @@ import os
 
 import torchreid
 
+import models
 from engines.arcface import ImageArcFaceEngine
 from models.resnet import ResnetNewLosses
 parser = argparse.ArgumentParser(
@@ -40,11 +41,18 @@ datamanager = torchreid.data.ImageDataManager(
     train_sampler='RandomIdentitySampler' if args.loss == 'triplet' else 'RandomSampler'
 )
 
-model = torchreid.models.build_model(
-    name='resnet50',
-    num_classes=datamanager.num_train_pids,
-    loss=args.loss
-)
+if args.loss == 'arcface':
+    model = models.build_model(
+        name='resnet_arcface',
+        num_classes=datamanager.num_train_pids,
+        loss=args.loss
+    )
+else:
+    model = torchreid.models.build_model(
+        name='resnet50',
+        num_classes=datamanager.num_train_pids,
+        loss=args.loss
+    )
 model.cuda()
 optimizer = torchreid.optim.build_optimizer(
     model,
