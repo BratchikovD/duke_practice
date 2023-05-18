@@ -43,7 +43,7 @@ class ArcFaceLoss(nn.Module):
         output = (one_hot * phi) + ((1.0 - one_hot) * cosine)
 
         B_avg = torch.exp(self.avg_cosine(cosine).log()) - self.eps
-        s = math.sqrt(2) * torch.log(torch.tensor(self.out_features - 1, dtype=torch.float32)) / torch.max(self.margin, B_avg)
+        s = math.sqrt(2) * torch.log(torch.tensor(self.out_features - 1, dtype=torch.float32)) / torch.max(torch.tensor(self.margin, dtype=torch.float32).cuda(), B_avg)
         output *= s.cuda()
 
         return F.cross_entropy(output, targets)
