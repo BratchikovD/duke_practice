@@ -1,7 +1,7 @@
 from __future__ import division, print_function, absolute_import
 
 from torchreid import engine
-from ..losses.arcface import ArcfaceLoss
+from losses import ArcfaceLoss
 
 
 class ImageArcFaceEngine(engine.Engine):
