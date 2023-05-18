@@ -18,7 +18,7 @@ class ArcFaceLoss(nn.Module):
         self.in_features = in_features
         self.out_features = out_features
 
-        self.s = math.sqrt(2)*math.log(out_features-1)
+        self.s = 64
         self.margin = margin
 
         self.cosine_threshold = math.cos(math.pi - margin)
