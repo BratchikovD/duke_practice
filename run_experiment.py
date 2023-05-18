@@ -38,7 +38,7 @@ datamanager = torchreid.data.ImageDataManager(
     batch_size_train=args.batch_size,
     batch_size_test=args.batch_size,
     combineall=False,
-    train_sampler='RandomIdentitySampler' if (args.loss == 'triplet' or args.loss == 'arcface') else 'RandomSampler'
+    train_sampler='RandomIdentitySampler' if args.loss == 'triplet' else 'RandomSampler'
 )
 
 if args.loss == 'arcface':
