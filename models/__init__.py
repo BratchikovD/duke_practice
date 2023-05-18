@@ -4,7 +4,6 @@ from .resnet import resnet_arcface
 
 __model_factory = {
     'resnet_arcface': resnet_arcface,
-
 }
 
 

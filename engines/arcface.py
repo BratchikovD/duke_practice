@@ -12,7 +12,7 @@ class ImageArcFaceEngine(engine.Engine):
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
-        self.criterion = ArcfaceLoss(2048, 702, feature_scale, margin)
+        self.criterion = ArcfaceLoss(128, datamanager.num_train_pids, feature_scale, margin)
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
@@ -22,7 +22,6 @@ class ImageArcFaceEngine(engine.Engine):
 
         outputs, features = self.model(imgs)
 
-        loss = 0
         loss_summary = {}
 
         loss = self.compute_loss(self.criterion, features, pids)
