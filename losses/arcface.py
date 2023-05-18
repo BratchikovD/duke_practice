@@ -16,8 +16,12 @@ class ArcfaceLoss(nn.Module):
         super(ArcfaceLoss, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
+
+        assert feature_scale >= 0 and margin >= 0
+
         self.feature_scale = feature_scale
         self.margin = margin
+
         self.cosine_threshold = math.cos(math.pi - margin)
         self.modified_margin = math.sin(math.pi - margin) * margin
         self.weight = nn.Parameter(torch.FloatTensor(out_features, in_features))

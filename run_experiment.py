@@ -3,6 +3,7 @@ import os
 
 import torchreid
 
+from engines.arcface import ImageArcFaceEngine
 parser = argparse.ArgumentParser(
     prog='run_experiment',
     description='Запускает обучение и тестирование модели на датасете DukeMTMC.'
@@ -11,7 +12,9 @@ parser = argparse.ArgumentParser(
 parser.add_argument('--model', default='resnet50',
                     help='Задаёт базовую модель для извлечения признаков. \nДоступные значения: resnet50.')
 parser.add_argument('--loss', default='softmax',
-                    help='Задает функцию потерь, которую нужно использовать при обучении. \nДоступные значения: softmax, triplet.')
+                    help='Задает функцию потерь, которую нужно использовать при обучении. \nДоступные значения: softmax, triplet, arcface.')
+parser.add_argument('--arc_scale', default=30.0, help='Feature_scale для ArcFace.')
+parser.add_argument('--arc_margin', default=0.5, help='Смещение для ArcFace')
 parser.add_argument('--optimizer', default='adam',
                     help='Выбор оптимизатора для обучения. \nДоступные значения: adam, sgd')
 parser.add_argument('--scheduler', default='single_step',
@@ -63,6 +66,8 @@ elif args.loss == 'softmax':
     engine = torchreid.engine.ImageSoftmaxEngine(
         datamanager, model, optimizer, scheduler=scheduler
     )
+elif args.loss == 'arcface':
+    engine = ImageArcFaceEngine(datamanager, model, optimizer, feature_scale=args.arc_scale, margin=args.arc_margin)
 else:
     raise NotImplementedError
 

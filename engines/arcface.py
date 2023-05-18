@@ -4,9 +4,9 @@ from torchreid import engine
 from ..losses.arcface import ArcfaceLoss
 
 
-class ArcFaceEngine(engine.Engine):
+class ImageArcFaceEngine(engine.Engine):
     def __init__(self, datamanager, model, optimizer, feature_scale=30, margin=0.5, scheduler=None):
-        super(ArcFaceEngine, self).__init__(datamanager, True)
+        super(ImageArcFaceEngine, self).__init__(datamanager, True)
 
         self.model = model
         self.optimizer = optimizer
