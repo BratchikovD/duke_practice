@@ -1,18 +1,18 @@
 from __future__ import division, print_function, absolute_import
 
 from torchreid import engine
-from losses import ArcfaceLoss
+from losses import ArcFaceLoss
 
 
 class ImageArcFaceEngine(engine.Engine):
-    def __init__(self, datamanager, model, optimizer, feature_scale=30, margin=0.5, scheduler=None):
+    def __init__(self, datamanager, model, optimizer, margin=0.5, scheduler=None):
         super(ImageArcFaceEngine, self).__init__(datamanager, True)
 
         self.model = model
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
-        self.criterion = ArcfaceLoss(2048, datamanager.num_train_pids, feature_scale, margin)
+        self.criterion = ArcFaceLoss(2048, datamanager.num_train_pids, margin)
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
