@@ -26,6 +26,10 @@ class ArcFaceLoss(nn.Module):
         self.weight = nn.Parameter(torch.FloatTensor(out_features, in_features))
         nn.init.xavier_uniform_(self.weight)
 
+    @staticmethod
+    def avg_cosine(cosine):
+        return torch.mean(cosine)
+
     def forward(self, inputs, targets):
         cosine = F.linear(F.normalize(inputs), F.normalize(self.weight.cuda()))
         sin_theta = torch.sqrt(1.0 - torch.pow(cosine, 2))
@@ -37,17 +41,9 @@ class ArcFaceLoss(nn.Module):
         one_hot.scatter_(1, targets.view(-1, 1), 1)
 
         output = (one_hot * phi) + ((1.0 - one_hot) * cosine)
-        output *= self.feature_scale
+
+        B_avg = torch.exp(self.avg_cosine(cosine).log()) - self.eps
+        s = torch.sqrt(2) * torch.log(torch.tensor(self.out_features - 1, dtype=torch.float32)) / torch.max(self.margin, B_avg)
+        output *= s.cuda()
 
         return F.cross_entropy(output, targets)
-
-    @property
-    def feature_scale(self):
-        B_avg = torch.exp(self.avg_cosine.log()) - self.eps
-        s = torch.sqrt(2) * torch.log(torch.tensor(self.out_features - 1, dtype=torch.float32)) / torch.max(self.margin, B_avg)
-        return s.cuda()
-
-    @property
-    def avg_cosine(self):
-        cosine = F.linear(F.normalize(self.inputs), F.normalize(self.weight))
-        return torch.mean(cosine)
