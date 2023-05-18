@@ -35,8 +35,8 @@ datamanager = torchreid.data.ImageDataManager(
     sources='dukemtmcreid',
     height=256,
     width=128,
-    batch_size_train=32,
-    batch_size_test=32,
+    batch_size_train=int(args.batch_size),
+    batch_size_test=int(args.batch_size),
     combineall=False,
     train_sampler='RandomIdentitySampler' if args.loss == 'triplet' else 'RandomSampler'
 )
