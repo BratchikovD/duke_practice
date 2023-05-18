@@ -4,6 +4,7 @@ import os
 import torchreid
 
 from engines.arcface import ImageArcFaceEngine
+from models.resnet import ResnetNewLosses
 parser = argparse.ArgumentParser(
     prog='run_experiment',
     description='Запускает обучение и тестирование модели на датасете DukeMTMC.'
