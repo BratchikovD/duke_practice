@@ -18,7 +18,7 @@ class ArcFaceLoss(nn.Module):
         self.in_features = in_features
         self.out_features = out_features
 
-        self.eps = 1e-6
+        self.s = math.sqrt(2)*math.log(out_features-1)
         self.margin = margin
 
         self.cosine_threshold = math.cos(math.pi - margin)
@@ -42,8 +42,6 @@ class ArcFaceLoss(nn.Module):
 
         output = (one_hot * phi) + ((1.0 - one_hot) * cosine)
 
-        B_avg = torch.exp(self.avg_cosine(cosine).log()) - self.eps
-        s = math.sqrt(2) * torch.log(torch.tensor(self.out_features - 1, dtype=torch.float32)) / torch.max(torch.tensor(self.margin, dtype=torch.float32).cuda(), B_avg)
-        output *= s.cuda()
+        output *= self.s
 
         return F.cross_entropy(output, targets)
