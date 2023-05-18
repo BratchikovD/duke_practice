@@ -28,7 +28,7 @@ class ArcfaceLoss(nn.Module):
         nn.init.xavier_uniform_(self.weight)
 
     def forward(self, inputs, targets):
-        cosine = F.linear(F.normalize(inputs), F.normalize(self.weight))
+        cosine = F.linear(F.normalize(inputs), F.normalize(self.weight.cuda()))
         sin_theta = torch.sqrt((1.0-torch.pow(cosine, 2)).clamp(0, 1))
 
         phi = cosine*math.cos(self.margin) - sin_theta*math.sin(self.margin)
