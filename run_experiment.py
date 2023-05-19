@@ -59,7 +59,7 @@ scheduler = torchreid.optim.build_lr_scheduler(
     lr_scheduler='multi_step',
     stepsize=[10, 15, 20, 25, 30],
     max_epoch=60,
-    gamma=0.4,
+    gamma=0.1,
 )
 
 if args.loss == 'triplet':
