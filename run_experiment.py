@@ -48,7 +48,9 @@ model.cuda()
 optimizer = torchreid.optim.build_optimizer(
     model,
     optim=args.optimizer,
-    lr=args.lr
+    lr=args.lr,
+    stepsize=10,
+    gamma=0.95
 )
 
 scheduler = torchreid.optim.build_lr_scheduler(
