@@ -13,7 +13,7 @@ class ArcFaceLoss(nn.Module):
     Reference: ArcFace: Additive Angular Margin Loss for Deep Face Recognition arXiv:1801.07698
     """
 
-    def __init__(self, in_features, out_features, margin=0.5):
+    def __init__(self, in_features, out_features, margin=1.5):
         super(ArcFaceLoss, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
