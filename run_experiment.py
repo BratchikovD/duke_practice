@@ -54,7 +54,7 @@ optimizer = torchreid.optim.build_optimizer(
 scheduler = torchreid.optim.build_lr_scheduler(
     optimizer,
     lr_scheduler=args.scheduler,
-    stepsize=args.sc_step_size,
+    stepsize=[10, 20, 30, 40, 50],
     gamma=0.95
 )
 
