@@ -32,8 +32,9 @@ datamanager = torchreid.data.ImageDataManager(
     sources='dukemtmcreid',
     height=256,
     width=128,
+    transforms=['random_flip', "random_crop", 'color_jitter'],
     batch_size_train=args.batch_size,
-    batch_size_test=args.batch_size,
+    batch_size_test=256,
     combineall=False,
     train_sampler='RandomIdentitySampler' if args.loss == 'triplet' or args.loss == 'arcface' else 'RandomSampler'
 )
@@ -41,7 +42,8 @@ datamanager = torchreid.data.ImageDataManager(
 model = models.build_model(
     name=args.model,
     num_classes=datamanager.num_train_pids,
-    loss=args.loss
+    loss=args.loss,
+    pretrained=True
 )
 model.cuda()
 
