@@ -24,7 +24,7 @@ class ArcFaceLoss(nn.Module):
         self.cosine_threshold = math.cos(math.pi - margin)
         self.modified_margin = math.sin(math.pi - margin) * margin
         self.weight = nn.Parameter(torch.FloatTensor(out_features, in_features))
-        nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
+        nn.init.xavier_uniform_(self.weight)
 
     @staticmethod
     def avg_cosine(cosine):
