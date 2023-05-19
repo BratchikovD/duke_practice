@@ -43,3 +43,19 @@ def resnet_arcface(num_classes, loss='arcface', pretrained=True, **kwargs):
     if pretrained:
         models.resnet.init_pretrained_weights(model, model_urls['resnet50'])
     return model
+
+
+def resnet152(num_classes, loss='softmax', pretrained=True, **kwargs):
+    model = ResnetNewLosses(
+        num_classes=num_classes,
+        loss=loss,
+        block=models.resnet.Bottleneck,
+        layers=[3, 8, 36, 3],
+        last_stride=2,
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
+    )
+    if pretrained:
+        models.resnet.init_pretrained_weights(model, model_urls['resnet152'])
+    return model

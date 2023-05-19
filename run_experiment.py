@@ -10,8 +10,8 @@ parser = argparse.ArgumentParser(
     description='Запускает обучение и тестирование модели на датасете DukeMTMC.'
 )
 
-parser.add_argument('--model', default='resnet50',
-                    help='Задаёт базовую модель для извлечения признаков. \nДоступные значения: resnet50, resnet_arcface, osnet_arcface.')
+parser.add_argument('--model', default='resnet_arcface',
+                    help='Задаёт базовую модель для извлечения признаков. \nДоступные значения:  resnet_arcface, resnet152.')
 parser.add_argument('--loss', default='softmax',
                     help='Задает функцию потерь, которую нужно использовать при обучении. \nДоступные значения: softmax, triplet, arcface.')
 parser.add_argument('--optimizer', default='adam',
@@ -38,26 +38,13 @@ datamanager = torchreid.data.ImageDataManager(
     train_sampler='RandomIdentitySampler' if args.loss == 'triplet' or args.loss == 'arcface' else 'RandomSampler'
 )
 
-if args.loss == 'arcface':
-    if args.model == 'resnet50':
-        model = models.build_model(
-            name='resnet_arcface',
-            num_classes=datamanager.num_train_pids,
-            loss=args.loss
-        )
-    else:
-        model = models.build_model(
-            name='osnet_arcface',
-            num_classes=datamanager.num_train_pids,
-            loss=args.loss
-        )
-else:
-    model = torchreid.models.build_model(
-        name='resnet50',
-        num_classes=datamanager.num_train_pids,
-        loss=args.loss
-    )
+model = models.build_model(
+    name=args.model,
+    num_classes=datamanager.num_train_pids,
+    loss=args.loss
+)
 model.cuda()
+
 optimizer = torchreid.optim.build_optimizer(
     model,
     optim=args.optimizer,

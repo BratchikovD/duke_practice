@@ -1,11 +1,11 @@
 from __future__ import absolute_import
 
-from .resnet import resnet_arcface
-from .osnet import osnet_x1_0_arcface
+from .resnet import resnet_arcface, resnet152
+
 
 __model_factory = {
     'resnet_arcface': resnet_arcface,
-    'osnet_arcface': osnet_x1_0_arcface
+    'resnet152': resnet152
 }
 
 
