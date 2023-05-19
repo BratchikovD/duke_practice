@@ -39,11 +39,18 @@ datamanager = torchreid.data.ImageDataManager(
 )
 
 if args.loss == 'arcface':
-    model = models.build_model(
-        name='resnet_arcface',
-        num_classes=datamanager.num_train_pids,
-        loss=args.loss
-    )
+    if args.model == 'resnet50':
+        model = models.build_model(
+            name='resnet_arcface',
+            num_classes=datamanager.num_train_pids,
+            loss=args.loss
+        )
+    else:
+        model = models.build_model(
+            name='osnet_arcface',
+            num_classes=datamanager.num_train_pids,
+            loss=args.loss
+        )
 else:
     model = torchreid.models.build_model(
         name='resnet50',
