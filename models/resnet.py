@@ -8,6 +8,9 @@ model_urls = {
 
 
 class ResnetNewLosses(models.resnet.ResNet):
+    def __init__(self):
+        super(ResnetNewLosses, self).__init__()
+
     def forward(self, x):
         f = self.featuremaps(x)
         v = self.global_avgpool(f)

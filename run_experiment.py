@@ -5,18 +5,15 @@ import torchreid
 
 import models
 from engines.arcface import ImageArcFaceEngine
-from models.resnet import ResnetNewLosses
 parser = argparse.ArgumentParser(
     prog='run_experiment',
     description='Запускает обучение и тестирование модели на датасете DukeMTMC.'
 )
 
 parser.add_argument('--model', default='resnet50',
-                    help='Задаёт базовую модель для извлечения признаков. \nДоступные значения: resnet50.')
+                    help='Задаёт базовую модель для извлечения признаков. \nДоступные значения: resnet50, resnet_arcface, osnet_arcface.')
 parser.add_argument('--loss', default='softmax',
                     help='Задает функцию потерь, которую нужно использовать при обучении. \nДоступные значения: softmax, triplet, arcface.')
-parser.add_argument('--arc_scale', type=float, default=30.0, help='Feature_scale для ArcFace.')
-parser.add_argument('--arc_margin', type=float, default=0.5, help='Смещение для ArcFace')
 parser.add_argument('--optimizer', default='adam',
                     help='Выбор оптимизатора для обучения. \nДоступные значения: adam, sgd')
 parser.add_argument('--scheduler', default='single_step',
@@ -76,7 +73,7 @@ elif args.loss == 'softmax':
         datamanager, model, optimizer, scheduler=scheduler
     )
 elif args.loss == 'arcface':
-    engine = ImageArcFaceEngine(datamanager, model, optimizer, scheduler=scheduler, margin=args.arc_margin)
+    engine = ImageArcFaceEngine(datamanager, model, optimizer, scheduler=scheduler)
 else:
     raise NotImplementedError
 
