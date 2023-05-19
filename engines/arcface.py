@@ -5,7 +5,7 @@ from losses import ArcFaceLoss
 
 
 class ImageArcFaceEngine(engine.Engine):
-    def __init__(self, datamanager, model, optimizer, margin=0.1, scheduler=None):
+    def __init__(self, datamanager, model, optimizer, margin=0.00001, scheduler=None):
         super(ImageArcFaceEngine, self).__init__(datamanager, True)
 
         self.model = model
