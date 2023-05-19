@@ -2,9 +2,6 @@ from torchreid import models
 
 
 class OSNetNewLosses(models.osnet.OSNet):
-    def __init__(self):
-        super(OSNetNewLosses, self).__init__()
-
     def forward(self, x, return_featuremaps=False):
         x = self.featuremaps(x)
         if return_featuremaps:
