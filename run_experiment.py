@@ -57,7 +57,7 @@ optimizer = torchreid.optim.build_optimizer(
 scheduler = torchreid.optim.build_lr_scheduler(
     optimizer,
     lr_scheduler=args.scheduler,
-    stepsize=60,
+    stepsize=20,
 )
 
 if args.loss == 'triplet':
