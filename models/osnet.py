@@ -34,7 +34,7 @@ class OSNetNewLosses(models.osnet.OSNet):
 
 def osnet_x1_0(num_classes=1000, pretrained=True, loss='softmax', **kwargs):
     # standard size (width x1.0)
-    model = models.osnet.OSNet(
+    model = OSNetNewLosses(
         num_classes,
         blocks=[models.osnet.OSBlock, models.osnet.OSBlock, models.osnet.OSBlock],
         layers=[2, 2, 2],
@@ -49,7 +49,7 @@ def osnet_x1_0(num_classes=1000, pretrained=True, loss='softmax', **kwargs):
 
 def osnet_x0_75(num_classes=1000, pretrained=True, loss='softmax', **kwargs):
     # medium size (width x0.75)
-    model = models.osnet.OSNet(
+    model = OSNetNewLosses(
         num_classes,
         blocks=[models.osnet.OSBlock, models.osnet.OSBlock, models.osnet.OSBlock],
         layers=[2, 2, 2],
@@ -64,7 +64,7 @@ def osnet_x0_75(num_classes=1000, pretrained=True, loss='softmax', **kwargs):
 
 def osnet_x0_5(num_classes=1000, pretrained=True, loss='softmax', **kwargs):
     # tiny size (width x0.5)
-    model = models.osnet.OSNet(
+    model = OSNetNewLosses(
         num_classes,
         blocks=[models.osnet.OSBlock, models.osnet.OSBlock, models.osnet.OSBlock],
         layers=[2, 2, 2],
@@ -79,7 +79,7 @@ def osnet_x0_5(num_classes=1000, pretrained=True, loss='softmax', **kwargs):
 
 def osnet_x0_25(num_classes=1000, pretrained=True, loss='softmax', **kwargs):
     # very tiny size (width x0.25)
-    model = models.osnet.OSNet(
+    model = OSNetNewLosses(
         num_classes,
         blocks=[models.osnet.OSBlock, models.osnet.OSBlock, models.osnet.OSBlock],
         layers=[2, 2, 2],
@@ -97,7 +97,7 @@ def osnet_ibn_x1_0(
 ):
     # standard size (width x1.0) + IBN layer
     # Ref: Pan et al. Two at Once: Enhancing Learning and Generalization Capacities via IBN-Net. ECCV, 2018.
-    model = models.osnet.OSNet(
+    model = OSNetNewLosses(
         num_classes,
         blocks=[models.osnet.OSBlock, models.osnet.OSBlock, models.osnet.OSBlock],
         layers=[2, 2, 2],
