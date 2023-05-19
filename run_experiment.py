@@ -15,7 +15,7 @@ parser.add_argument('--model', default='resnet_arcface',
 parser.add_argument('--loss', default='softmax',
                     help='Задает функцию потерь, которую нужно использовать при обучении. \nДоступные значения: softmax, triplet, arcface.')
 parser.add_argument('--optimizer', default='adam',
-                    help='Выбор оптимизатора для обучения. \nДоступные значения: adam, sgd')
+                    help='Выбор оптимизатора для обучения. \nДоступные значения: adam, sgd, amsgrad')
 parser.add_argument('--scheduler', default='single_step',
                     help='Выбор lr_scheduler\'a, который использовать. \nДоступные значения: single_step, multi_step')
 parser.add_argument('--sc_step_size', type=int, default=20, help='Scheduler шаг.')
@@ -32,7 +32,7 @@ datamanager = torchreid.data.ImageDataManager(
     sources='dukemtmcreid',
     height=256,
     width=128,
-    transforms=['random_flip', "random_crop", 'color_jitter'],
+    transforms=['random_flip'],
     batch_size_train=args.batch_size,
     batch_size_test=256,
     combineall=False,
@@ -56,8 +56,7 @@ optimizer = torchreid.optim.build_optimizer(
 scheduler = torchreid.optim.build_lr_scheduler(
     optimizer,
     lr_scheduler=args.scheduler,
-    stepsize=[3, 6, 9, 12],
-    gamma=0.95
+    stepsize=30,
 )
 
 if args.loss == 'triplet':
