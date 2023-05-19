@@ -36,7 +36,7 @@ datamanager = torchreid.data.ImageDataManager(
     batch_size_train=args.batch_size,
     batch_size_test=256,
     combineall=False,
-    train_sampler='RandomIdentitySampler' if args.loss == 'triplet' or args.loss == 'arcface' else 'RandomSampler'
+    train_sampler='RandomIdentitySampler' if args.loss == 'triplet' else 'RandomSampler'
 )
 
 model = models.build_model(
@@ -51,12 +51,13 @@ optimizer = torchreid.optim.build_optimizer(
     model,
     optim=args.optimizer,
     lr=args.lr,
+    momentum=0.6
 )
 
 scheduler = torchreid.optim.build_lr_scheduler(
     optimizer,
     lr_scheduler=args.scheduler,
-    stepsize=30,
+    stepsize=20,
 )
 
 if args.loss == 'triplet':
