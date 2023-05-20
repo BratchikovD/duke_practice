@@ -16,7 +16,7 @@ class CenterLossEngine(engine.Engine):
         self.criterion = CenterLoss()
         self.criterion_optimizer = torch.optim.SGD(
             self.criterion.parameters(),
-            lr=0.5
+            lr=0.05
         )
 
     def forward_backward(self, data):
@@ -38,8 +38,6 @@ class CenterLossEngine(engine.Engine):
         self.criterion_optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
-        for param in self.criterion.parameters():
-            param.grad.data *= (1. / 1)
         self.criterion_optimizer.step()
 
         return loss_summary
