@@ -16,7 +16,7 @@ class ImageArcFaceEngine(engine.Engine):
         self.criterion = ArcFaceLoss(2048, datamanager.num_train_pids, margin)
         self.criterion_optimizer = torch.optim.Adam(
             self.criterion.parameters(),
-            lr=0.5
+            lr=0.05
         )
 
     def forward_backward(self, data):
