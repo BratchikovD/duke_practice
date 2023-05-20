@@ -52,7 +52,6 @@ optimizer = torchreid.optim.build_optimizer(
     optim=args.optimizer,
     lr=args.lr,
     momentum=0.6,
-    weight_decay=0
 )
 
 scheduler = torchreid.optim.build_lr_scheduler(
