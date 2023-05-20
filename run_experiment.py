@@ -4,7 +4,7 @@ import os
 import torchreid
 
 import models
-from engines import ImageArcFaceEngine, ContrastiveEngine
+from engines import ImageArcFaceEngine, ContrastiveEngine, CenterLossEngine
 
 parser = argparse.ArgumentParser(
     prog='run_experiment',
@@ -77,6 +77,8 @@ elif args.loss == 'arcface':
     engine = ImageArcFaceEngine(datamanager, model, optimizer, scheduler=scheduler)
 elif args.loss == 'contrastive':
     engine = ContrastiveEngine(datamanager, model, optimizer, scheduler=scheduler)
+elif args.loss == 'center':
+    engine = Cen
 else:
     raise NotImplementedError
 
