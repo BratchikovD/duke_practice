@@ -12,6 +12,7 @@ class CenterLoss(nn.Module):
         self.feat_dim = feat_dim
         self.use_gpu = use_gpu
         self.centers = nn.Parameter(torch.randn(self.num_classes, self.feat_dim).cuda())
+        nn.init.xavier_uniform_(self.centers)
 
     def forward(self, x, labels):
         batch_size = x.size(0)
