@@ -1,5 +1,5 @@
 from torchreid import models
-
+import torch.nn as nn
 
 model_urls = {
     'resnet50':
@@ -14,7 +14,7 @@ class ResnetNewLosses(models.resnet.ResNet):
         f = self.featuremaps(x)
         v = self.global_avgpool(f)
         v = v.view(v.size(0), -1)
-
+        v = nn.Dropout(v, p=0.5)
         if self.fc is not None:
             v = self.fc(v)
 
