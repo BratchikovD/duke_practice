@@ -12,7 +12,7 @@ class ContrastiveEngine(engine.Engine):
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
-        self.criterion = ContrastiveEngine()
+        self.criterion = ContrastiveLoss()
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
