@@ -6,7 +6,7 @@ import torch
 
 
 class ImageArcFaceEngine(engine.Engine):
-    def __init__(self, datamanager, model, optimizer, margin=0.3, scheduler=None):
+    def __init__(self, datamanager, model, optimizer, margin=0.7, scheduler=None):
         super(ImageArcFaceEngine, self).__init__(datamanager, True)
 
         self.model = model
