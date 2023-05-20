@@ -38,6 +38,8 @@ class CenterLossEngine(engine.Engine):
         self.criterion_optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
-        self.criterion_optimizer.step()
+        for param in self.criterion.parameters():
+            param.grad.data *= (1. / 1)
+            self.criterion_optimizer.step()
 
         return loss_summary
