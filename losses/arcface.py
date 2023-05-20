@@ -11,12 +11,12 @@ class ArcFaceLoss(nn.Module):
     Reference: ArcFace: Additive Angular Margin Loss for Deep Face Recognition arXiv:1801.07698
     """
 
-    def __init__(self, in_features, out_features, margin=1.8):
+    def __init__(self, in_features, out_features, margin=0.5):
         super(ArcFaceLoss, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
 
-        self.s = math.sqrt(2) * math.log(701)
+        self.s = math.sqrt(2) * math.log(1040)
         self.margin = margin
 
         self.cosine_threshold = math.cos(math.pi - margin)
