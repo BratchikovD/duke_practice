@@ -31,7 +31,8 @@ args = parser.parse_args()
 
 datamanager = torchreid.data.ImageDataManager(
     root='.',
-    sources='dukemtmcreid',
+    sources='msmt17',
+    targets=['dukemtmcreid', 'market1501'],
     height=256,
     width=128,
     transforms=['random_flip', 'random_crop', 'random_patch', 'random_erase'],
