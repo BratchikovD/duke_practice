@@ -31,8 +31,7 @@ args = parser.parse_args()
 
 datamanager = torchreid.data.ImageDataManager(
     root='.',
-    sources='msmt17',
-    targets=['dukemtmcreid', 'market1501'],
+    sources='dukemtmcreid',
     height=256,
     width=128,
     transforms=['random_flip', 'random_crop'],
@@ -59,8 +58,8 @@ optimizer = torchreid.optim.build_optimizer(
 
 scheduler = torchreid.optim.build_lr_scheduler(
     optimizer,
-    lr_scheduler='multi_step',
-    stepsize=[30, 45],
+    lr_scheduler='single_step',
+    stepsize=7,
     max_epoch=args.epochs,
     gamma=0.1,
 )
