@@ -2,6 +2,7 @@ from __future__ import division, print_function, absolute_import
 
 from torchreid import engine
 from losses import ArcFaceLoss
+import torch
 
 
 class ImageArcFaceEngine(engine.Engine):
@@ -13,6 +14,10 @@ class ImageArcFaceEngine(engine.Engine):
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
         self.criterion = ArcFaceLoss(2048, datamanager.num_train_pids, margin)
+        self.criterion_optimizer = torch.optim.Adam(
+            self.criterion.parameters(),
+            lr=0.0005
+        )
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
@@ -30,7 +35,9 @@ class ImageArcFaceEngine(engine.Engine):
         assert loss_summary
 
         self.optimizer.zero_grad()
+        self.criterion_optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
+        self.criterion_optimizer.step()
 
         return loss_summary
