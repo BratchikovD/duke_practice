@@ -75,7 +75,7 @@ elif args.loss == 'softmax':
 elif args.loss == 'arcface':
     engine = ImageArcFaceEngine(datamanager, model, optimizer, scheduler=scheduler)
 elif args.loss == 'contrastive':
-    engine = ContrastiveEngine(datamanager, model. optimizer, scheduler=scheduler)
+    engine = ContrastiveEngine(datamanager, model, optimizer, scheduler=scheduler)
 else:
     raise NotImplementedError
 
