@@ -6,7 +6,7 @@ import torch.nn.functional as F
 
 
 class CenterLoss(nn.Module):
-    def __init__(self, num_classes=702, feat_dim=2048, use_gpu=True):
+    def __init__(self, num_classes=1041, feat_dim=2048, use_gpu=True):
         super(CenterLoss, self).__init__()
         self.num_classes = num_classes
         self.feat_dim = feat_dim
