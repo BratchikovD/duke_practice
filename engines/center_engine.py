@@ -14,9 +14,9 @@ class CenterLossEngine(engine.Engine):
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
         self.criterion = CenterLoss()
-        self.criterion_optimizer = torch.optim.SGD(
+        self.criterion_optimizer = torch.optim.Adam(
             self.criterion.parameters(),
-            lr=0.01
+            lr=0.1
         )
 
     def forward_backward(self, data):
