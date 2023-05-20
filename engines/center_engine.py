@@ -1,7 +1,8 @@
 from __future__ import division, print_function, absolute_import
 
-from torchreid import engine
+from torchreid import engine, optim
 from losses import CenterLoss
+import torch
 
 
 class CenterLossEngine(engine.Engine):
@@ -13,6 +14,10 @@ class CenterLossEngine(engine.Engine):
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
         self.criterion = CenterLoss()
+        self.criterion_optimizer = torch.optim.SGD(
+            self.criterion.parameters(),
+            lr=0.5
+        )
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
@@ -30,7 +35,9 @@ class CenterLossEngine(engine.Engine):
         assert loss_summary
 
         self.optimizer.zero_grad()
+        self.criterion_optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
+        self.criterion_optimizer.step()
 
         return loss_summary
