@@ -38,7 +38,7 @@ datamanager = torchreid.data.ImageDataManager(
     batch_size_train=args.batch_size,
     batch_size_test=256,
     combineall=False,
-    train_sampler='RandomIdentitySampler' if args.loss in ['triplet', 'contrastive'] else 'RandomSampler',
+    train_sampler='RandomIdentitySampler' if args.loss in ['triplet', 'contrastive', 'center'] else 'RandomSampler',
     num_instances=6,
 )
 
@@ -78,7 +78,7 @@ elif args.loss == 'arcface':
 elif args.loss == 'contrastive':
     engine = ContrastiveEngine(datamanager, model, optimizer, scheduler=scheduler)
 elif args.loss == 'center':
-    engine = Cen
+    engine = CenterLossEngine(datamanager, model, optimizer, scheduler=scheduler)
 else:
     raise NotImplementedError
 
