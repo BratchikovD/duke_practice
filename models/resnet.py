@@ -14,7 +14,8 @@ class ResnetNewLosses(models.resnet.ResNet):
         f = self.featuremaps(x)
         v = self.global_avgpool(f)
         v = v.view(v.size(0), -1)
-        v = nn.Dropout(v, p=0.5)
+        v = nn.Dropout(v)
+
         if self.fc is not None:
             v = self.fc(v)
 
