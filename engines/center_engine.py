@@ -14,7 +14,7 @@ class CenterLossEngine(engine.Engine):
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
         self.criterion = CenterLoss()
-        self.criterion_optimizer = torch.optim.Adam(
+        self.criterion_optimizer = torch.optim.SGD(
             self.criterion.parameters(),
             lr=0.5
         )
@@ -40,6 +40,6 @@ class CenterLossEngine(engine.Engine):
         self.optimizer.step()
         for param in self.criterion.parameters():
             param.grad.data *= (1. / 1)
-            self.criterion_optimizer.step()
+        self.criterion_optimizer.step()
 
         return loss_summary
