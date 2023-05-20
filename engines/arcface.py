@@ -1,6 +1,6 @@
 from __future__ import division, print_function, absolute_import
 
-from torchreid import engine
+from torchreid import engine, losses
 from losses import ArcFaceLoss
 import torch
 
