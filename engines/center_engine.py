@@ -17,7 +17,7 @@ class CenterLossEngine(engine.Engine):
         self.criterion_soft = losses.CrossEntropyLoss(702)
         self.criterion_optimizer = torch.optim.Adam(
             self.criterion.parameters(),
-            lr=0.5
+            lr=0.05
         )
 
     def forward_backward(self, data):
@@ -32,7 +32,7 @@ class CenterLossEngine(engine.Engine):
 
         loss_center = self.compute_loss(self.criterion, features, pids)
         loss_cross = self.compute_loss(self.criterion_soft, outputs, pids)
-        loss = loss_center + loss_cross
+        loss = loss_center*0.7 + loss_cross
         loss_summary['loss'] = loss
 
         assert loss_summary
