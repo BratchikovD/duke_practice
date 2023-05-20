@@ -16,15 +16,26 @@ class ContrastiveLoss(nn.Module):
         self.margin = margin
 
     def forward(self, inputs, targets):
-        n = inputs.size(0)
-        # Compute similarity matrix
-        sim_matrix = F.cosine_similarity(inputs.unsqueeze(1), inputs.unsqueeze(0), dim=2)
-        # Create positive and negative mask
-        target_matrix = targets.view(n, 1) == targets.view(1, n)
-        positive_mask = target_matrix.triu(diagonal=1)  # Exclude self-comparison
-        negative_mask = ~target_matrix
-        # Compute positive and negative loss
-        positive_loss = (1 - sim_matrix).pow(2).masked_select(positive_mask).mean()
-        negative_loss = F.relu(sim_matrix - self.margin).pow(2).masked_select(negative_mask).mean()
+        pairwise_distances = torch.cdist(inputs, inputs, p=2)
+
+        labels_equal = targets.unsqueeze(0) == targets.unsqueeze(1)
+        labels_not_equal = ~labels_equal
+
+        positive_mask = labels_equal.triu(diagonal=1)
+        negative_mask = labels_not_equal.triu(diagonal=1)
+
+        positive_distances = pairwise_distances.masked_select(positive_mask)
+
+        if positive_distances.numel() > 0:
+            positive_loss = positive_distances.pow(2).mean()
+        else:
+            positive_loss = 0.0
+
+        negative_distances = pairwise_distances.masked_select(negative_mask)
+
+        if negative_distances.numel() > 0:
+            negative_loss = F.relu(self.margin - negative_distances).pow(2).mean()
+        else:
+            negative_loss = 0.0
 
         return positive_loss + negative_loss
