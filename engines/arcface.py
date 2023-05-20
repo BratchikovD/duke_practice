@@ -14,9 +14,9 @@ class ImageArcFaceEngine(engine.Engine):
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
         self.criterion = ArcFaceLoss(2048, datamanager.num_train_pids, margin)
-        self.criterion_optimizer = torch.optim.Adam(
+        self.criterion_optimizer = torch.optim.SGD(
             self.criterion.parameters(),
-            lr=0.0003
+            lr=0.0005
         )
 
     def forward_backward(self, data):
