@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division
-
 import math
 
 import torch
@@ -18,17 +16,13 @@ class ArcFaceLoss(nn.Module):
         self.in_features = in_features
         self.out_features = out_features
 
-        self.s = 9.2
+        self.s = math.sqrt(2) * math.log(701)
         self.margin = margin
 
         self.cosine_threshold = math.cos(math.pi - margin)
         self.modified_margin = math.sin(math.pi - margin) * margin
         self.weight = nn.Parameter(torch.FloatTensor(out_features, in_features))
         nn.init.xavier_uniform_(self.weight)
-
-    @staticmethod
-    def avg_cosine(cosine):
-        return torch.mean(cosine)
 
     def forward(self, inputs, targets):
         cosine = F.linear(F.normalize(inputs), F.normalize(self.weight.cuda()))

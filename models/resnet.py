@@ -14,7 +14,6 @@ class ResnetNewLosses(models.resnet.ResNet):
         f = self.featuremaps(x)
         v = self.global_avgpool(f)
         v = v.view(v.size(0), -1)
-        v = nn.Dropout()(v)
 
         if self.fc is not None:
             v = self.fc(v)
@@ -26,10 +25,8 @@ class ResnetNewLosses(models.resnet.ResNet):
 
         if self.loss == 'softmax':
             return y
-        elif self.loss == 'triplet' or self.loss == 'arcface':
-            return y, v
         else:
-            raise KeyError("Unsupported loss: {}".format(self.loss))
+            return y, v
 
 
 def resnet_arcface(num_classes, loss='arcface', pretrained=True, **kwargs):
