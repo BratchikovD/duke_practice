@@ -72,6 +72,7 @@ class ResnetNewLosses(models.resnet.ResNet):
         if not self.training:
             return v
         if self.loss == 'arcface':
+            v = F.normalize(v, dim=1)
             y = self.arc_block(v, labels)
 
         y = self.classifier(v)
