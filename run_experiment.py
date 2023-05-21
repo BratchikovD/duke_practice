@@ -4,7 +4,7 @@ import os
 import torchreid
 
 import models
-from engines import ImageArcFaceEngine, ContrastiveEngine, CenterLossEngine, TripletCenterEngine
+from engines import ImageArcFaceEngine, ContrastiveEngine, CenterLossEngine, TripletCenterEngine, SphereFaceEngine
 
 parser = argparse.ArgumentParser(
     prog='run_experiment',
@@ -82,6 +82,8 @@ elif args.loss == 'center':
     engine = CenterLossEngine(datamanager, model, optimizer, scheduler=scheduler)
 elif args.loss == 'triplet_center':
     engine = TripletCenterEngine(datamanager, model, optimizer, scheduler=scheduler, weight_center=0.01, weight_triplet=1)
+elif args.loss == 'sphere':
+    engine = SphereFaceEngine(datamanager, model, optimizer, scheduler=scheduler)
 else:
     raise NotImplementedError
 
