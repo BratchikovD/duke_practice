@@ -44,6 +44,7 @@ class TripletCenterEngine(engine.Engine):
             lr=0.5,
             weight_decay=0.0005
         )
+        print(self.weight_c)
 
     def forward_backward(self, data):
         self.optimizer.zero_grad()
