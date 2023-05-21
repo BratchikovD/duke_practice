@@ -13,7 +13,7 @@ class TripletCenterEngine(engine.Engine):
             optimizer,
             margin=0.3,
             weight_triplet=1,
-            weight_center=0.0005,
+            weight_center=0.1,
             scheduler=None,
             use_gpu=True,
             label_smooth=True
@@ -36,7 +36,7 @@ class TripletCenterEngine(engine.Engine):
         self.optimizer_center = torch.optim.SGD(
             self.criterion_c.parameters(),
             lr=0.5,
-            weight_decay=0.001
+            weight_decay=0.0005
         )
 
     def forward_backward(self, data):
