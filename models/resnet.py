@@ -74,28 +74,30 @@ class ResnetNewLosses(models.resnet.ResNet):
         super().__init__(num_classes, loss, block, layers, **kwargs)
         self.arc_block = ArcMarginProduct(2048, 702, easy_margin=True)
         self.sphere = SphereFace(2048, 702)
+        self.bn2 = nn.BatchNorm1d(2048)
+        self.dp = nn.Dropout(0.5)
+        self.fc = nn.Linear(in_features=2048, out_features=1024, bias=True)
+        self.bn_after_fc = nn.BatchNorm1d(1024)
 
     def forward(self, x, labels=None):
         f = self.featuremaps(x)
-        v = self.global_avgpool(f)
-        v = v.view(v.size(0), -1)
+        x = F.avg_pool2d(x, x.size()[2:]).view(x.size()[:2])
+        x = self.bn2(x)
+        x = self.dp(x)
+        x = self.fc(x)
+        embeddings = self.bn3(x)
 
-        if self.fc is not None:
-            v = self.fc(v)
-
-        if not self.training:
-            return v
         if self.loss == 'arcface':
-            y = self.arc_block(v, labels)
+            y = self.arc_block(embeddings, labels)
         elif self.loss == 'sphere':
-            y = self.sphere(v, labels)
+            y = self.sphere(embeddings, labels)
         else:
-            y = self.classifier(v)
+            y = self.classifier(embeddings)
 
         if self.loss in ['softmax', 'arcface', 'sphere']:
             return y
         else:
-            return y, v
+            return y, embeddings
 
 
 def resnet_arcface(num_classes, loss='arcface', pretrained=True, **kwargs):
