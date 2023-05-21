@@ -13,7 +13,7 @@ class TripletCenterEngine(engine.Engine):
             optimizer,
             margin=0.3,
             weight_triplet=1,
-            weight_center=0.005,
+            weight_center=0.0005,
             scheduler=None,
             use_gpu=True,
             label_smooth=True
