@@ -14,15 +14,7 @@ model_urls = {
 
 
 class ArcMarginProduct(nn.Module):
-    r"""Implement of large margin arc distance: :
-        Args:
-            in_features: size of each input sample
-            out_features: size of each output sample
-            s: norm of input feature
-            m: margin
-            cos(theta + m)
-        """
-    def __init__(self, in_features, out_features, m=0.5, easy_margin=False):
+    def __init__(self, in_features, out_features, m=0., easy_margin=False):
         super(ArcMarginProduct, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
@@ -72,7 +64,6 @@ class ResnetNewLosses(models.resnet.ResNet):
         if not self.training:
             return v
         if self.loss == 'arcface':
-            v = F.normalize(v, dim=1)
             y = self.arc_block(v, labels)
         else:
             y = self.classifier(v)
