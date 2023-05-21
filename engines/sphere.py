@@ -1,21 +1,18 @@
 from torchreid import engine, losses
 from losses import ArcFaceLoss
+from losses import SphereLoss
 import torch
 
 
 class SphereFaceEngine(engine.Engine):
-    def __init__(self, datamanager, model, optimizer, scheduler=None):
+    def __init__(self, datamanager, model, scheduler=None):
         super(SphereFaceEngine, self).__init__(datamanager, True)
 
         self.model = model
-        self.optimizer = optimizer
+        self.criterion = SphereLoss(1024, datamanager.num_train_pids)
+        self.optimizer = torch.optim.Adam([list(self.model.parameters()), list(self.criterion.parameters())])
         self.scheduler = scheduler
-        self.register_model('model', model, optimizer, scheduler)
-        self.criterion = losses.CrossEntropyLoss(
-            num_classes=datamanager.num_train_pids,
-            use_gpu=True,
-            label_smooth=True
-        )
+        self.register_model('model', model, self.optimizer, scheduler)
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
@@ -23,11 +20,11 @@ class SphereFaceEngine(engine.Engine):
         imgs = imgs.cuda()
         pids = pids.cuda()
 
-        outputs = self.model(imgs, labels=pids)
+        outputs, features = self.model(imgs, labels=pids)
 
         loss_summary = {}
 
-        loss = self.compute_loss(self.criterion, outputs, pids)
+        loss = self.compute_loss(self.criterion, features, pids)
         loss_summary['loss'] = loss
 
         assert loss_summary

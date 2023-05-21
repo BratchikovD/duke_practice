@@ -13,27 +13,6 @@ model_urls = {
 }
 
 
-class SphereFace(nn.Module):
-    def __init__(self, in_features, out_features, m=4):
-        super(SphereFace, self).__init__()
-        self.in_features = in_features
-        self.out_features = out_features
-        self.m = m
-        self.weight = nn.Parameter(torch.Tensor(out_features, in_features))
-        self.weight.data.uniform_(-1, 1).renorm_(2, 1, 1e-5).mul_(1e5)
-
-    def forward(self, inputs, label):
-        x = F.normalize(inputs)
-        W = F.normalize(self.weight)
-        cosine_theta = F.linear(x, W)
-        phi_theta = self.m * torch.acos(cosine_theta)
-        one_hot = torch.zeros_like(cosine_theta)
-        one_hot.scatter_(1, label.view(-1, 1), 1)
-        output = (one_hot * phi_theta) + ((1.0 - one_hot) * cosine_theta)
-
-        return output
-
-
 class ArcMarginProduct(nn.Module):
     def __init__(self, in_features, out_features, m=0.5, easy_margin=False):
         super(ArcMarginProduct, self).__init__()
@@ -73,7 +52,6 @@ class ResnetNewLosses(models.resnet.ResNet):
     def __init__(self, num_classes, loss, block, layers, **kwargs):
         super().__init__(num_classes, loss, block, layers, **kwargs)
         self.arc_block = ArcMarginProduct(2048, 702, easy_margin=True)
-        self.sphere = SphereFace(1024, 702)
         self.bn2 = nn.BatchNorm1d(2048)
         self.dp = nn.Dropout(0.5)
         self.fc = nn.Linear(in_features=2048, out_features=1024, bias=True)
@@ -89,12 +67,10 @@ class ResnetNewLosses(models.resnet.ResNet):
 
         if self.loss == 'arcface':
             y = self.arc_block(embeddings, labels)
-        elif self.loss == 'sphere':
-            y = self.sphere(embeddings, labels)
         else:
             y = self.classifier(embeddings)
 
-        if self.loss in ['softmax', 'arcface', 'sphere']:
+        if self.loss in ['softmax']:
             return y
         else:
             return y, embeddings
