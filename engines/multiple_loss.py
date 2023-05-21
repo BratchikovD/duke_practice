@@ -3,7 +3,7 @@ from __future__ import division, print_function, absolute_import
 from torchreid import metrics
 from losses.center_loss import CenterLoss
 from torchreid import losses, engine
-
+import torch
 
 class TripletCenterEngine(engine.Engine):
     def __init__(
@@ -13,7 +13,7 @@ class TripletCenterEngine(engine.Engine):
             optimizer,
             margin=0.3,
             weight_triplet=1,
-            weight_center=0.005,
+            weight_center=0.0005,
             scheduler=None,
             use_gpu=True,
             label_smooth=True
@@ -22,6 +22,7 @@ class TripletCenterEngine(engine.Engine):
 
         self.model = model
         self.optimizer = optimizer
+
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
 
@@ -31,9 +32,17 @@ class TripletCenterEngine(engine.Engine):
         self.weight_c = weight_center
 
         self.criterion_t = losses.TripletLoss(margin=margin)
-        self.criterion_c = CenterLoss( )
+        self.criterion_c = CenterLoss()
+        self.optimizer_center = torch.optim.SGD(
+            self.criterion_c.parameters(),
+            lr=0.5,
+            weight_decay=0.0005
+        )
 
     def forward_backward(self, data):
+        self.optimizer.zero_grad()
+        self.optimizer_center.zero_grad()
+
         imgs, pids = self.parse_data_for_train(data)
 
         if self.use_gpu:
@@ -57,8 +66,11 @@ class TripletCenterEngine(engine.Engine):
 
         assert loss_summary
 
-        self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
+        for param in self.criterion_c.parameters():
+            param.grad.data *= (1. / self.weight_c)
+
+        self.optimizer_center.step()
 
         return loss_summary
