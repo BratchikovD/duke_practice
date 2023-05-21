@@ -14,7 +14,7 @@ model_urls = {
 
 
 class ArcMarginProduct(nn.Module):
-    def __init__(self, in_features, out_features, m=0, easy_margin=False):
+    def __init__(self, in_features, out_features, m=0.5, easy_margin=False):
         super(ArcMarginProduct, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
@@ -81,8 +81,8 @@ def resnet_arcface(num_classes, loss='arcface', pretrained=True, **kwargs):
         block=models.resnet.Bottleneck,
         layers=[3, 4, 6, 3],
         last_stride=2,
-        fc_dims=None,
-        dropout_p=None,
+        fc_dims=702,
+        dropout_p=0.5,
         **kwargs
     )
     if pretrained:
