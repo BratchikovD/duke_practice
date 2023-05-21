@@ -10,7 +10,7 @@ class SphereFaceEngine(engine.Engine):
 
         self.model = model
         self.criterion = SphereLoss(1024, datamanager.num_train_pids)
-        self.optimizer = torch.optim.Adam([self.model.parameters(), self.criterion.parameters()], lr=1e-3)
+        self.optimizer = torch.optim.Adam(list(self.model.parameters())+list(self.criterion.parameters()), lr=1e-3)
         self.scheduler = scheduler
         self.register_model('model', model, self.optimizer, scheduler)
 
