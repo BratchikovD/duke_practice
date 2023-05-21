@@ -22,11 +22,11 @@ class ArcMarginProduct(nn.Module):
             m: margin
             cos(theta + m)
         """
-    def __init__(self, in_features, out_features, s=30.0, m=0.50, easy_margin=False):
+    def __init__(self, in_features, out_features, m=0.50, easy_margin=False):
         super(ArcMarginProduct, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
-        self.s = s
+        self.s = math.sqrt(2)*math.log(out_features-1)
         self.m = m
         self.weight = nn.Parameter(torch.FloatTensor(out_features, in_features))
         nn.init.xavier_uniform_(self.weight)
