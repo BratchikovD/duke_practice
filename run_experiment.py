@@ -83,7 +83,7 @@ elif args.loss == 'center':
 elif args.loss == 'triplet_center':
     engine = TripletCenterEngine(datamanager, model, optimizer, scheduler=scheduler, weight_center=0.01, weight_triplet=1)
 elif args.loss == 'sphere':
-    engine = SphereFaceEngine(datamanager, model, optimizer, scheduler=scheduler)
+    engine = SphereFaceEngine(datamanager, model, scheduler=scheduler)
 else:
     raise NotImplementedError
 
