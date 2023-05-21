@@ -81,12 +81,11 @@ class ResnetNewLosses(models.resnet.ResNet):
 
     def forward(self, x, labels=None):
         f = self.featuremaps(x)
-        x = F.avg_pool2d(x, x.size()[2:]).view(x.size()[:2])
-        x = self.bn2(x)
-        x = self.dp(x)
-        x = self.fc(x)
+        v = F.avg_pool2d(f, f.size()[2:]).view(f.size()[:2])
+        v = self.bn2(v)
+        v = self.dp(v)
+        embeddings = self.fc(v)
         embeddings = self.bn_after_fc(x)
-        embeddings = embeddings.view(embeddings.size(0), -1)
 
         if self.loss == 'arcface':
             y = self.arc_block(embeddings, labels)
