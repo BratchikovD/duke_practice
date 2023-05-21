@@ -56,6 +56,7 @@ class ResnetNewLosses(models.resnet.ResNet):
         self.dp = nn.Dropout(0.5)
         self.fc = nn.Linear(in_features=2048, out_features=1024, bias=True)
         self.bn_after_fc = nn.BatchNorm1d(1024)
+        self.classifier = nn.Linear(1024, num_classes)
 
     def forward(self, x, labels=None):
         f = self.featuremaps(x)
@@ -67,8 +68,8 @@ class ResnetNewLosses(models.resnet.ResNet):
 
         if self.loss == 'arcface':
             y = self.arc_block(embeddings, labels)
-        else:
-            y = self.classifier(embeddings)
+
+        y = self.classifier(embeddings)
 
         if self.loss in ['softmax']:
             return y
