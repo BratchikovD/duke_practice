@@ -4,7 +4,7 @@ import os
 import torchreid
 
 import models
-from engines import ImageArcFaceEngine, ContrastiveEngine, CenterLossEngine
+from engines import ImageArcFaceEngine, ContrastiveEngine, CenterLossEngine, TripletCenterEngine
 
 parser = argparse.ArgumentParser(
     prog='run_experiment',
@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('--model', default='resnet_arcface',
                     help='Задаёт базовую модель для извлечения признаков. \nДоступные значения:  resnet_arcface, resnet152.')
 parser.add_argument('--loss', default='softmax',
-                    help='Задает функцию потерь, которую нужно использовать при обучении. \nДоступные значения: softmax, triplet, arcface, contrastive.')
+                    help='Задает функцию потерь, которую нужно использовать при обучении. \nДоступные значения: softmax, triplet, arcface, contrastive, triplet_center.')
 parser.add_argument('--optimizer', default='adam',
                     help='Выбор оптимизатора для обучения. \nДоступные значения: adam, sgd, amsgrad')
 parser.add_argument('--scheduler', default='single_step',
@@ -29,6 +29,7 @@ parser.add_argument('--log_path', help='Путь сохранения лога �
 
 args = parser.parse_args()
 
+identity_sampler_losses = ['triplet', 'contrastive', 'triplet_center']
 datamanager = torchreid.data.ImageDataManager(
     root='.',
     sources='dukemtmcreid',
@@ -61,7 +62,7 @@ scheduler = torchreid.optim.build_lr_scheduler(
     lr_scheduler='single_step',
     stepsize=args.sc_step_size,
     max_epoch=args.epochs,
-    gamma=0.5,
+    gamma=args.gamma,
 )
 
 if args.loss == 'triplet':
@@ -79,6 +80,8 @@ elif args.loss == 'contrastive':
     engine = ContrastiveEngine(datamanager, model, optimizer, scheduler=scheduler)
 elif args.loss == 'center':
     engine = CenterLossEngine(datamanager, model, optimizer, scheduler=scheduler)
+elif args.loss == 'triplet_center':
+    engine = TripletCenterEngine(datamanager, model, optimizer, scheduler=scheduler)
 else:
     raise NotImplementedError
 
