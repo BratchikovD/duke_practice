@@ -8,7 +8,7 @@ class SphereLoss(nn.Module):
         self.scale = scale
         self.cross_entropy = nn.CrossEntropyLoss()
         self.W = torch.nn.Parameter(torch.randn(in_feats, n_classes),
-                                    requires_grad=True)
+                                    requires_grad=True).cuda()
         nn.init.xavier_normal_(self.W, gain=1)
 
     def forward(self, x, label):
