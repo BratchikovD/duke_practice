@@ -51,7 +51,7 @@ class TripletCenterEngine(engine.Engine):
             loss_summary['loss_t'] = loss_t.item()
 
         if self.weight_c > 0:
-            loss_c = self.compute_loss(self.criterion_c, outputs, pids)
+            loss_c = self.compute_loss(self.criterion_c, features, pids)
             loss += self.weight_c * loss_c
             loss_summary['loss_c'] = loss_c.item()
 
