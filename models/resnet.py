@@ -73,8 +73,8 @@ class ResnetNewLosses(models.resnet.ResNet):
             return v
         if self.loss == 'arcface':
             y = self.arc_block(v, labels)
-
-        y = self.classifier(v)
+        else:
+            y = self.classifier(v)
 
         if self.loss in ['softmax', 'arcface']:
             return y
