@@ -6,14 +6,18 @@ import torch
 
 
 class ImageArcFaceEngine(engine.Engine):
-    def __init__(self, datamanager, model, optimizer, margin=0.5, scheduler=None):
+    def __init__(self, datamanager, model, optimizer, scheduler=None):
         super(ImageArcFaceEngine, self).__init__(datamanager, True)
 
         self.model = model
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
-        self.criterion = ArcFaceLoss(702, datamanager.num_train_pids, margin)
+        self.criterion = losses.CrossEntropyLoss(
+            num_classes=datamanager.num_train_pids,
+            use_gpu=True,
+            label_smooth=True
+        )
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
@@ -21,7 +25,7 @@ class ImageArcFaceEngine(engine.Engine):
         imgs = imgs.cuda()
         pids = pids.cuda()
 
-        outputs, features = self.model(imgs)
+        outputs = self.model(imgs, labels=pids)
 
         loss_summary = {}
 
