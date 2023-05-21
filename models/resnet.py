@@ -82,7 +82,7 @@ def resnet_arcface(num_classes, loss='arcface', pretrained=True, **kwargs):
         layers=[3, 4, 6, 3],
         last_stride=2,
         fc_dims=None,
-        dropout_p=0.3,
+        dropout_p=None,
         **kwargs
     )
     if pretrained:
