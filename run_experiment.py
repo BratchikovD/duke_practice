@@ -49,7 +49,7 @@ model = models.build_model(
     pretrained=True
 )
 model.cuda()
-
+print(model)
 optimizer = torchreid.optim.build_optimizer(
     model,
     optim=args.optimizer,
