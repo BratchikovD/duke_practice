@@ -81,7 +81,7 @@ def resnet_arcface(num_classes, loss='arcface', pretrained=True, **kwargs):
         block=models.resnet.Bottleneck,
         layers=[3, 4, 6, 3],
         last_stride=2,
-        fc_dims=[702],
+        fc_dims=[2048],
         dropout_p=0.5,
         **kwargs
     )
