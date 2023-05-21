@@ -33,7 +33,7 @@ class TripletCenterEngine(engine.Engine):
 
         self.criterion_t = losses.TripletLoss(margin=margin)
         self.criterion_c = CenterLoss()
-        self.optimizer_center = torch.optim.Adam(
+        self.optimizer_center = torch.optim.SGD(
             self.criterion_c.parameters(),
             lr=0.5,
             weight_decay=0.0005
