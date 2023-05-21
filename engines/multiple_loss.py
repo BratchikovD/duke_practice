@@ -13,7 +13,7 @@ class TripletCenterEngine(engine.Engine):
             optimizer,
             margin=0.3,
             weight_triplet=1,
-            weight_center=0.0005,
+            weight_center=0.005,
             scheduler=None,
             use_gpu=True,
             label_smooth=True
@@ -33,7 +33,7 @@ class TripletCenterEngine(engine.Engine):
 
         self.criterion_t = losses.TripletLoss(margin=margin)
         self.criterion_c = CenterLoss()
-        self.optimizer_center = torch.optim.SGD(
+        self.optimizer_center = torch.optim.Adam(
             self.criterion_c.parameters(),
             lr=0.5,
             weight_decay=0.0005
