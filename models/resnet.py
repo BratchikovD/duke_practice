@@ -22,7 +22,7 @@ class ArcMarginProduct(nn.Module):
             m: margin
             cos(theta + m)
         """
-    def __init__(self, in_features, out_features, m=1.5, easy_margin=False):
+    def __init__(self, in_features, out_features, m=0.5, easy_margin=False):
         super(ArcMarginProduct, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
