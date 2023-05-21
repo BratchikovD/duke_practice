@@ -36,7 +36,7 @@ class TripletCenterEngine(engine.Engine):
         self.optimizer_center = torch.optim.SGD(
             self.criterion_c.parameters(),
             lr=0.5,
-            weight_decay=0.0005
+            weight_decay=0.001
         )
 
     def forward_backward(self, data):
