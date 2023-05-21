@@ -14,7 +14,6 @@ class CenterLossEngine(engine.Engine):
         self.scheduler = scheduler
         self.register_model('model', model, optimizer, scheduler)
         self.criterion = CenterLoss()
-        self.criterion_soft = losses.CrossEntropyLoss(702)
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
@@ -27,14 +26,12 @@ class CenterLossEngine(engine.Engine):
         loss_summary = {}
 
         loss_center = self.compute_loss(self.criterion, features, pids)
-        loss_cross = self.compute_loss(self.criterion_soft, outputs, pids)
-        loss = loss_center*0.7 + loss_cross
-        loss_summary['loss'] = loss
+        loss_summary['loss'] = loss_center
 
         assert loss_summary
 
         self.optimizer.zero_grad()
-        loss.backward()
+        loss_center.backward()
         self.optimizer.step()
 
         return loss_summary
