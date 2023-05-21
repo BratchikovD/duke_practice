@@ -81,7 +81,7 @@ elif args.loss == 'contrastive':
 elif args.loss == 'center':
     engine = CenterLossEngine(datamanager, model, optimizer, scheduler=scheduler)
 elif args.loss == 'triplet_center':
-    engine = TripletCenterEngine(datamanager, model, optimizer, scheduler=scheduler, weight_center=0.7, weight_triplet=1)
+    engine = TripletCenterEngine(datamanager, model, optimizer, scheduler=scheduler, weight_center=0.005, weight_triplet=1, semi_hard=True)
 else:
     raise NotImplementedError
 
