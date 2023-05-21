@@ -85,7 +85,7 @@ class ResnetNewLosses(models.resnet.ResNet):
         v = self.bn2(v)
         v = self.dp(v)
         embeddings = self.fc(v)
-        embeddings = self.bn_after_fc(x)
+        embeddings = self.bn_after_fc(embeddings)
 
         if self.loss == 'arcface':
             y = self.arc_block(embeddings, labels)
