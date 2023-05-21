@@ -2,8 +2,11 @@ from __future__ import division, print_function, absolute_import
 
 from torchreid import metrics
 from losses.center_loss import CenterLoss
+from losses import TripletSemiHardLoss
+
 from torchreid import losses, engine
 import torch
+
 
 class TripletCenterEngine(engine.Engine):
     def __init__(
@@ -16,7 +19,7 @@ class TripletCenterEngine(engine.Engine):
             weight_center=0.9,
             scheduler=None,
             use_gpu=True,
-            label_smooth=True
+            semi_hard=False
     ):
         super(TripletCenterEngine, self).__init__(datamanager, use_gpu)
 
@@ -30,8 +33,11 @@ class TripletCenterEngine(engine.Engine):
         assert weight_triplet + weight_center > 0
         self.weight_t = weight_triplet
         self.weight_c = weight_center
-
-        self.criterion_t = losses.TripletLoss(margin=margin)
+        self.semi_hard = semi_hard
+        if not self.semi_hard:
+            self.criterion_t = losses.TripletLoss(margin=margin)
+        else:
+            self.criterion_t = TripletSemiHardLoss(margin=margin)
         self.criterion_c = CenterLoss()
         self.optimizer_center = torch.optim.SGD(
             self.criterion_c.parameters(),
