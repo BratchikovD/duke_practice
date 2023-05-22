@@ -61,7 +61,7 @@ class ResnetNewLosses(models.resnet.ResNet):
     def forward(self, x, labels=None):
         f = self.featuremaps(x)
 
-        if self.loss == 'sphere':
+        if self.loss == 'sphere' or self.loss == 'arcface':
             v = F.avg_pool2d(f, f.size()[2:]).view(f.size()[:2])
             v = self.bn2(v)
             v = self.dp(v)
