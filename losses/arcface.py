@@ -18,7 +18,7 @@ class ArcFaceLoss(nn.Module):
         self.out_features = out_features
         self.s = s
         self.m = m
-        self.weight = Parameter(torch.FloatTensor(out_features, in_features))
+        self.weight = Parameter(torch.FloatTensor(out_features, in_features), requires_grad=True).cuda()
         nn.init.xavier_uniform_(self.weight)
 
         self.easy_margin = easy_margin
