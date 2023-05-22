@@ -94,7 +94,6 @@ engine.run(
     max_epoch=args.epochs,
     save_dir=f'logs/resnet50-{args.loss}-{args.epochs}' if not args.log_path else args.log_path,
     print_freq=15,
-    test_only=True
 )
 
 if args.visualize:
