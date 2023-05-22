@@ -71,10 +71,13 @@ class ResnetNewLosses(models.resnet.ResNet):
 
         y = self.classifier(embeddings)
 
+        if not self.training:
+            return embeddings
+
         if self.loss in ['softmax']:
             return y
         else:
-            return embeddings
+            return y, embeddings
 
 
 def resnet_arcface(num_classes, loss='arcface', pretrained=True, **kwargs):
