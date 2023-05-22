@@ -19,7 +19,7 @@ class SphereFaceEngine(engine.Engine):
             max_epoch=60,
             gamma=0.1,
         )
-        self.register_model('model', model, self.optimizer, scheduler)
+        self.register_model('model', model, self.optimizer, self.scheduler)
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
