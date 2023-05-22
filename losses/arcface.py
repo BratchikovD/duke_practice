@@ -35,8 +35,7 @@ class ArcFaceLoss(nn.Module):
             phi = torch.where(cosine > 0, phi, cosine)
         else:
             phi = torch.where(cosine > self.th, phi, cosine - self.mm)
-        device = torch.device("cuda:1" if torch.cuda.is_available() else 'cpu')
-        one_hot = torch.zeros(cosine.size(), device=device)
+        one_hot = torch.zeros(cosine.size())
         one_hot.scatter_(1, labels.view(-1, 1).long(), 1)
         output = (one_hot * phi) + ((1.0 - one_hot) * cosine)
         output *= self.s
