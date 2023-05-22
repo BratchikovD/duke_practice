@@ -1,3 +1,4 @@
+import torchreid
 from torchreid import engine, losses
 from losses import ArcFaceLoss
 from losses import SphereLoss
@@ -11,7 +12,13 @@ class SphereFaceEngine(engine.Engine):
         self.model = model
         self.criterion = SphereLoss(1024, datamanager.num_train_pids)
         self.optimizer = torch.optim.Adam(list(self.model.parameters())+list(self.criterion.parameters()), lr=1e-3)
-        self.scheduler = scheduler
+        self.scheduler = torchreid.optim.build_lr_scheduler(
+            self.optimizer,
+            lr_scheduler='multi_step',
+            stepsize=[30, 45],
+            max_epoch=60,
+            gamma=0.1,
+        )
         self.register_model('model', model, self.optimizer, scheduler)
 
     def forward_backward(self, data):
