@@ -55,7 +55,7 @@ class ResnetNewLosses(models.resnet.ResNet):
         self.dp = nn.Dropout(0.5)
         self.fc = nn.Linear(in_features=2048, out_features=1024, bias=True)
         self.bn_after_fc = nn.BatchNorm1d(1024)
-        if self.loss == 'sphere':
+        if self.loss == 'sphere' or self.loss == 'arcface':
             self.classifier = nn.Linear(1024, num_classes)
 
     def forward(self, x, labels=None):
