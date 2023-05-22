@@ -15,7 +15,7 @@ class SphereFaceEngine(engine.Engine):
         self.scheduler = torchreid.optim.build_lr_scheduler(
             self.optimizer,
             lr_scheduler='multi_step',
-            stepsize=[1, 2],
+            stepsize=[30, 45],
             max_epoch=60,
             gamma=0.1,
         )
