@@ -60,11 +60,17 @@ class ResnetNewLosses(models.resnet.ResNet):
 
     def forward(self, x, labels=None):
         f = self.featuremaps(x)
-        v = F.avg_pool2d(f, f.size()[2:]).view(f.size()[:2])
-        v = self.bn2(v)
-        v = self.dp(v)
-        embeddings = self.fc(v)
-        embeddings = self.bn_after_fc(embeddings)
+
+        if self.loss == 'sphere':
+            v = F.avg_pool2d(f, f.size()[2:]).view(f.size()[:2])
+            v = self.bn2(v)
+            v = self.dp(v)
+            embeddings = self.fc(v)
+            embeddings = self.bn_after_fc(embeddings)
+        else:
+            v = self.global_avgpool(f)
+            v = v.view(v.size(0), -1)
+            embeddings = v
 
         if self.loss == 'arcface':
             y = self.arc_block(embeddings, labels)
