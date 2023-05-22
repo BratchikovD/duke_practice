@@ -20,7 +20,7 @@ class SphereFaceEngine(engine.Engine):
         imgs = imgs.cuda()
         pids = pids.cuda()
 
-        outputs, features = self.model(imgs, labels=pids)
+        features = self.model(imgs, labels=pids)
 
         loss_summary = {}
 
