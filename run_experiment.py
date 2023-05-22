@@ -29,7 +29,7 @@ parser.add_argument('--log_path', help='Путь сохранения лога �
 
 args = parser.parse_args()
 
-identity_sampler_losses = ['triplet', 'contrastive', 'triplet_center', 'sphere']
+identity_sampler_losses = ['triplet', 'contrastive', 'triplet_center']
 datamanager = torchreid.data.ImageDataManager(
     root='.',
     sources='dukemtmcreid',
@@ -75,7 +75,7 @@ elif args.loss == 'softmax':
         datamanager, model, optimizer, scheduler=scheduler
     )
 elif args.loss == 'arcface':
-    engine = ImageArcFaceEngine(datamanager, model, optimizer, scheduler=scheduler)
+    engine = ImageArcFaceEngine(datamanager, model)
 elif args.loss == 'contrastive':
     engine = ContrastiveEngine(datamanager, model, optimizer, scheduler=scheduler)
 elif args.loss == 'center':

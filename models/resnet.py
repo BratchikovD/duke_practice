@@ -51,7 +51,6 @@ class ArcMarginProduct(nn.Module):
 class ResnetNewLosses(models.resnet.ResNet):
     def __init__(self, num_classes, loss, block, layers, **kwargs):
         super().__init__(num_classes, loss, block, layers, **kwargs)
-        self.arc_block = ArcMarginProduct(1024, 702, easy_margin=True)
         self.bn2 = nn.BatchNorm1d(2048)
         self.dp = nn.Dropout(0.5)
         self.fc = nn.Linear(in_features=2048, out_features=1024, bias=True)
@@ -72,9 +71,6 @@ class ResnetNewLosses(models.resnet.ResNet):
             v = self.global_avgpool(f)
             v = v.view(v.size(0), -1)
             embeddings = v
-
-        if self.loss == 'arcface':
-            y = self.arc_block(embeddings, labels)
 
         y = self.classifier(embeddings)
 
