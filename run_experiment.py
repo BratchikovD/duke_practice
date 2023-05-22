@@ -29,7 +29,7 @@ parser.add_argument('--log_path', help='Путь сохранения лога �
 
 args = parser.parse_args()
 
-identity_sampler_losses = ['triplet', 'contrastive', 'triplet_center', ['sphere']]
+identity_sampler_losses = ['triplet', 'contrastive', 'triplet_center', 'sphere']
 datamanager = torchreid.data.ImageDataManager(
     root='.',
     sources='dukemtmcreid',
