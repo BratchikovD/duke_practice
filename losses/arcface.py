@@ -28,7 +28,7 @@ class ArcFaceLoss(nn.Module):
         self.mm = math.sin(math.pi - m) * m
 
     def forward(self, inputs, labels):
-        cosine = F.linear(F.normalize(input), F.normalize(self.weight))
+        cosine = F.linear(F.normalize(inputs), F.normalize(self.weight))
         sine = torch.sqrt((1.0 - torch.pow(cosine, 2)).clamp(0, 1))
         phi = cosine * self.cos_m - sine * self.sin_m
         if self.easy_margin:
