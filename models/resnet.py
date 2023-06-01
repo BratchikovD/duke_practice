@@ -189,7 +189,7 @@ def create_layer(in_chan, mid_chan, b_num, stride):
     return nn.Sequential(*blocks)
 
 
-def network_d():
+def network_d(num_classes, loss='sphere', pretrained=True, **kwargs):
     return NetworkD()
 
 
