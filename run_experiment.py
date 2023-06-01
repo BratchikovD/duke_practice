@@ -25,6 +25,7 @@ parser.add_argument('--batch_size', type=int, default=32, help='Размера �
 parser.add_argument('--lr', type=float, default=0.0003, help='Задаёт learning rate для оптимизатора.')
 parser.add_argument('--epochs', type=int, default=60, help='Количество эпох.')
 parser.add_argument('--visualize', action='store_true', default=False, help='Визуализирует изображения результатов ранкинга.')
+parser.add_argument('--test', action='store_true', default=False)
 parser.add_argument('--log_path', help='Путь сохранения лога обучения.')
 
 args = parser.parse_args()
@@ -89,6 +90,13 @@ else:
 
 if not os.path.isdir('./logs'):
     os.mkdir('logs')
+
+if args.test:
+    torchreid.utils.load_pretrained_weigths(model, './model_final.pkl')
+    engine.run(
+        test_only=True,
+        visrank=True
+    )
 
 engine.run(
     max_epoch=args.epochs,
